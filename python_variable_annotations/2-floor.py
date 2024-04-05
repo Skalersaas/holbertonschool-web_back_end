@@ -8,6 +8,7 @@
 
 import math
 
+
 def floor(n: float) -> int:
     '''Returns sum of two numbers with floating point'''
     return int(math.floor(n))
