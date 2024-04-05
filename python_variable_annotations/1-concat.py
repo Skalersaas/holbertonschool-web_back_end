@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 ''' Description: Type-annotated function concat that takes a string str1 and a string str2
     as arguments and returns a concatenated string
+    Arguments:
     str1 : string one
     str2 : string two
 '''
