@@ -8,7 +8,7 @@
 from typing import Optional, Sequence, Any
 
 
-def safe_first_element(lst: Sequence[Any]) -> Optional[Any]:
+def safe_first_element(lst: list) -> Optional[Any]:
     """
     Returns the first element of the list if it exists, otherwise returns None.
     
