@@ -8,7 +8,7 @@
 from typing import Union, Sequence, Any
 
 
-def safe_first_element(lst: Sequence[Any]) -> Union[Any,None]:
+def safe_first_element(lst: Sequence[Any]) -> Union[Any, None]:
     '''Checks if list exist, if yes returns first element'''
     if lst:
         return lst[0]
