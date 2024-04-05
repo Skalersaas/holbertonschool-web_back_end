@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+'''
+    float time random
+'''
 import asyncio
 from typing import List
 task_wait_random = __import__('3-tasks').task_wait_random
