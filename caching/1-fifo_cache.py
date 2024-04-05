@@ -19,7 +19,7 @@ class FIFOCache(BaseCaching):
                 first = next(iter(self.cache_data))
                 print("DISCARD:", first)
                 self.cache_data.pop(first)
-                
+
     def get(self, key):
         ''' Get an item by key
         '''
