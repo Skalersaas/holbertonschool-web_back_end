@@ -2,7 +2,6 @@
 """ function measures wait_n execution time """
 import asyncio
 import time
-from typing import List
 
 
 wait_n = __import__('1-concurrent_coroutines').wait_n
