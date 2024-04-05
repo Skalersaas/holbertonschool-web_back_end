@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
+''' Description: Type-annotated function safe_first_element
+    that takes a list lst as argument
+    and Checks if list exist, if yes returns first element.
+    Arguments: lst: Sequence[Any]
 '''
-Auqment function do duct type
-Arguments: lst: iterable[sequence]
-'''
 
-from typing import Sequence, Any, Union
+from typing import Optional, Sequence, Any
 
 
-def safe_first_element(lst: Sequence[Any]) -> Union[Any, None]:
-    ''' Return the first element of lst if there is any, otherwise None. '''
+def safe_first_element(lst: Sequence[Any]) -> Optional[Any]:
+    '''Checks if list exist, if yes returns first element'''
     if lst:
         return lst[0]
     else:
