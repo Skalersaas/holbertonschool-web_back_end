@@ -17,4 +17,3 @@ class BasicCache(BaseCaching):
         """
         if key and key in self.cache_data:
             return self.cache_data[key]
-        
