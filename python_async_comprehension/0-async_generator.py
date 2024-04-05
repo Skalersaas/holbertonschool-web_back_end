@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
 Description: contains function that
 yields random numbers once in a second
