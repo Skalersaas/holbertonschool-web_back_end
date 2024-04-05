@@ -9,7 +9,7 @@ from typing import Callable
 
 
 def make_multiplier(multiplier: float) -> Callable[[float], float]:
-    '''Returns sum of all elements in list'''
+    '''Returns function'''    
     def multiply_by(m: float)-> float:
         return multiplier * m
     return multiply_by
