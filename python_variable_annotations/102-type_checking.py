@@ -4,11 +4,12 @@
     and Checks if list exist, if yes returns first element.
     Arguments: lst: Sequence[Any]
 '''
+from typing import Tuple, List
 
 
-def zoom_array(lst: tuple, factor: int = 2) -> list:
+def zoom_array(lst: Tuple, factor: int = 2) -> List:
     """Zoom your camera"""
-    zoomed_in: list = [item for item in lst for i in range(factor)]
+    zoomed_in: List = [item for item in lst for i in range(factor)]
     return zoomed_in
 
 array = (12, 72, 91)
