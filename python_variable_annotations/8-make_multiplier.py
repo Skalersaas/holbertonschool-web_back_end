@@ -4,6 +4,7 @@
     and returns a function that multiplies a float by multiplier.
     Arguments: multiplier: float
 '''
+
 from typing import Callable
 
 
