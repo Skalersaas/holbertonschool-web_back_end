@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-'''
-    Type-annotated function add that takes a float a and a float b
-    as arguments and returns their sum as a float.
-    Jorikisad
-    Jroiki good
+''' Description: type-annotated function add that takes a float a and a float b
+    as arguments and returns their sum as a float
+    Arguments: a: float
+    b: float
 '''
 
 
