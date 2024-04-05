@@ -8,11 +8,9 @@
 from typing import Optional, Sequence, Any
 
 
-class Duck:
+def __safe_first_element__(lst: Sequence[Any]) -> Optional[Any]:
     '''Checks if list exist, if yes returns first element'''
-    def safe_first_element(lst: Sequence[Any]) -> Optional[Any]:
-        '''Checks if list exist, if yes returns first element'''
-        if lst:
-            return lst[0]
-        else:
-            return None
+    if lst:
+        return lst[0]
+    else:
+        return None
