@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Validating with mypy"""
+''' Description: Type-annotated function safe_first_element
+    that takes a list lst as argument
+    and Checks if list exist, if yes returns first element.
+    Arguments: lst: Sequence[Any]
+'''
 from typing import Tuple, List
 
 
