@@ -6,13 +6,13 @@ from base_caching import BaseCaching
 
 
 class LFUCache(BaseCaching):
-    ''' MRU cache class
+    ''' LFU cache class
     '''
 
 
     def __init__(self):
         ''' Initializer with additional list
-        ''' 
+        '''
         super().__init__()
         self.listC = {}
 
