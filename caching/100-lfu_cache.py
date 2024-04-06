@@ -8,8 +8,6 @@ from base_caching import BaseCaching
 class LFUCache(BaseCaching):
     ''' LFU cache class
     '''
-
-
     def __init__(self):
         ''' Initializer with additional list
         '''
@@ -23,7 +21,7 @@ class LFUCache(BaseCaching):
         if key and item:
             self.cache_data[key] = item
             if self.cache_data.__len__() > BaseCaching.MAX_ITEMS:
-                first = sorted(self.listC.items(), key = lambda x : x[1])[0][0]
+                first = sorted(self.listC.items(), key=lambda x: x[1])[0][0]
                 print("DISCARD:", first)
                 self.cache_data.pop(first)
                 self.listC.pop(first)
