@@ -11,13 +11,13 @@ from typing import Optional, Sequence, Any
 def safe_first_element(lst: Sequence[Any]) -> Optional[Any]:
     """
     Returns the first element of the list if it exists, otherwise returns None.
-    
+
     Args:
         lst (list): The input list.
-    
+
     Returns:
-        Optional[Any]: The first element of the list or None if the list is empty.
-    """    
+        Optional[Any]: The first element of the list or None
+    """
     if lst:
         return lst[0]
     else:
