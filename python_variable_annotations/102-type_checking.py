@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
-''' Description: Type-annotated function safe_first_element
-    that takes a list lst as argument
-    and Checks if list exist, if yes returns first element.
-    Arguments: lst: Sequence[Any]
-'''
+''' Description: Zooms array by factor '''
 from typing import Tuple, List
 
 
 def zoom_array(lst: Tuple, factor: int = 2) -> List:
-    """Zoom your camera"""
+    """Zoom your camera by factor"""
     zoomed_in: List = [
         item for item in lst
         for _ in range(factor)
