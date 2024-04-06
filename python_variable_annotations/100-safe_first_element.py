@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ''' Description: Type-annotated function safe_first_element
     that takes a list lst as argument
     and Checks if list exist, if yes returns first element.
@@ -19,6 +18,7 @@ def safe_first_element(lst: Sequence[Any]) -> Optional[Any]:
         Optional[Any]: The first element of the list or None if the list is empty.
     """
     if lst:
-        return list(lst)[0]
+        return lst[0]
     else:
         return None
+print(safe_first_element.__annotations__)
