@@ -8,10 +8,14 @@ from base_caching import BaseCaching
 class LFUCache(BaseCaching):
     ''' MRU cache class
     '''
+
+
     def __init__(self):
+        ''' Initializer with additional list
+        ''' 
         super().__init__()
         self.listC = {}
-        
+
     def put(self, key, item):
         ''' Add an item in the cache
             and remove first if more than max items
