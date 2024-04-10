@@ -43,18 +43,21 @@ class Server:
         '''
         assert 0 <= index < len(self.dataset())
 
-        iDataset = self.indexed_dataset()
-        iPage = {}
-        i = index
+        indexed_dataset = self.indexed_dataset()
+        indexed_page = {}
 
-        while (i < len(self.dataset()) and len(iDataset) < page_size):
-            if i in iDataset:
-                iPage[i] = iDataset[i]
+        i = index
+        while (len(indexed_page) < page_size and i < len(self.dataset())):
+            if i in indexed_dataset:
+                indexed_page[i] = indexed_dataset[i]
             i += 1
+
+        page = list(indexed_page.values())
+        page_indices = indexed_page.keys()
 
         return {
             'index': index,
-            'next_index': max(iPage.keys()) + 1,
-            'page_size': len(list(iPage.values())),
-            'data': list(iPage.values())
+            'next_index': max(page_indices) + 1,
+            'page_size': len(page),
+            'data': page
         }
