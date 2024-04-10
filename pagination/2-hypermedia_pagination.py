@@ -51,7 +51,7 @@ class Server:
             return self.dataset()[nameRange[0]:nameRange[1]]
         except IndexError:
             return []
-    
+
     def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
         """_summary_
 
