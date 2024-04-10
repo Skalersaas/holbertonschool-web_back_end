@@ -55,6 +55,6 @@ class Server:
         return {
             'index': index,
             'next_index': max(iPage.keys()) + 1,
-            'page_size': page_size,
+            'page_size': len(iPage),
             'data': list(iPage.values())
         }
