@@ -63,7 +63,7 @@ class Server:
             Dict: _description_
         """
         nameList = self.get_page(page, page_size)
-        total = int(19419 / page_size)
+        total = int(len(self.dataset()) / page_size)
         return {
             'page_size': len(nameList),
             'page': page,
