@@ -4,7 +4,6 @@ Deletion-resilient hypermedia pagination
 """
 
 import csv
-import math
 from typing import List, Dict
 
 
@@ -47,15 +46,15 @@ class Server:
         iDataset = self.indexed_dataset()
         iPage = {}
         i = index
+
         while (i < len(iDataset) < page_size):
             if i in iDataset:
                 iPage[i] = iDataset[i]
             i += 1
-        
+
         return {
             'index': index,
             'next_index': max(iPage.keys()) + 1,
             'page_size': page_size,
-            'data': list(iPage.values())    
+            'data': list(iPage.values())
         }
-        
