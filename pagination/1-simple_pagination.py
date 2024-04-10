@@ -44,8 +44,8 @@ class Server:
         Returns:
             List[List]: _description_
         """
-        assert page > 0
-        assert page_size > 0
+        assert isinstance(page, int) and isinstance(page_size, int)
+        assert page_size > 0 and page > 0
         nameRange = index_range(page, page_size)
         try:
             return self.dataset()[nameRange[0]:nameRange[1]]
