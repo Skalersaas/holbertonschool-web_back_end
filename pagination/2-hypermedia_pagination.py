@@ -68,7 +68,7 @@ class Server:
             'page_size': len(nameList),
             'page': page,
             'data': nameList,
-            'next_page': None if total < page else page + 1,
+            'next_page': None if total <= page else page + 1,
             'prev_page': None if page == 1 else page - 1,
             'total_page': total
         }
