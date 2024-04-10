@@ -49,5 +49,5 @@ class Server:
         nameRange = index_range(page, page_size)
         try:
             return self.dataset()[nameRange[0]:nameRange[1]]
-        except:
+        except IndexError:
             return []
