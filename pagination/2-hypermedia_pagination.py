@@ -52,7 +52,7 @@ class Server:
         except IndexError:
             return []
     
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
         """_summary_
 
         Args:
