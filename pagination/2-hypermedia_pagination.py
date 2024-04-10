@@ -53,6 +53,15 @@ class Server:
             return []
     
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
+        """_summary_
+
+        Args:
+            page (int, optional): _description_. Defaults to 1.
+            page_size (int, optional): _description_. Defaults to 10.
+
+        Returns:
+            Dict: _description_
+        """
         nameList = self.get_page(page, page_size)
         total = int(19419 / page_size)
         return {
