@@ -65,7 +65,7 @@ class Server:
         nameList = self.get_page(page, page_size)
         total = math.ceil(len(self.dataset()) / page_size)
         return {
-            'page_size': page_size,
+            'page_size': len(nameList),
             'page': page,
             'data': nameList,
             'next_page': page + 1 if page < total else None,
