@@ -47,7 +47,7 @@ class Server:
         iPage = {}
         i = index
 
-        while (i < len(iDataset) < page_size):
+        while (i < len(self.__dataset) and len(iDataset) < page_size):
             if i in iDataset:
                 iPage[i] = iDataset[i]
             i += 1
