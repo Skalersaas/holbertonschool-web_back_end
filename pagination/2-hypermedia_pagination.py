@@ -65,7 +65,7 @@ class Server:
         nameList = self.get_page(page, page_size)
         total = int(19419 / page_size)
         return {
-            'page_size': page_size,
+            'page_size': len(nameList),
             'page': page,
             'data': nameList,
             'next_page': None if total < page else page + 1,
