@@ -38,6 +38,7 @@ class Server:
         assert page > 0
         assert page_size > 0
         nameRange = index_range(page, page_size)
-        return self.dataset()[nameRange[0]:nameRange[1]]
-serv = Server()
-serv.get_page(1, 5)
+        try:
+            return self.dataset()[nameRange[0]:nameRange[1]]
+        except:
+            return []
