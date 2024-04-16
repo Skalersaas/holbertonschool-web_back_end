@@ -6,6 +6,7 @@ import logging
 import mysql.connector
 import os
 
+
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
@@ -62,7 +63,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main() -> None:
-    '''Main func'''
+    '''Main'''
     connector = get_db()
 
     cursor = connector.cursor()
