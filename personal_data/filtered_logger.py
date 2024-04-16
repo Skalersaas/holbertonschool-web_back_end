@@ -5,6 +5,9 @@ import re
 import logging
 
 
+PII_FIELDS = ("name", "email", "ssn", "password", "date_of_birth")
+
+
 def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     '''Filtering values of the required fields'''
@@ -32,14 +35,14 @@ class RedactingFormatter(logging.Formatter):
                             super(RedactingFormatter, self).format(record),
                             self.SEPARATOR)
 
+
 def get_logger() -> logging.Logger:
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     logger.propagate = False
-    
+
     stream = logging.StreamHandler()
     stream.setFormatter(RedactingFormatter(PII_FIELDS))
 
     logger.addHandler(stream)
     return logger
-PII_FIELDS = ("name", "email", "ssn", "password", "date_of_birth")
