@@ -4,11 +4,10 @@ from typing import List
 import re
 
 
-def filter_datum(fields: List[str], redaction: str, message: str,
-                 separator: str) -> List[str]:
+def filter_datum(fields: List[str], redaction: str, message: str,separator: str) -> List[str]:
     '''Filtering'''
-    for item in fields:
-        message = re.sub(f"{item}=.*?{separator}",
-                         f"{item}={redaction}{separator}",
+    for i in fields:
+        message = re.sub(i + "=.*?" + separator,
+                         i + "=" + redaction + separator,
                          message)
     return message
