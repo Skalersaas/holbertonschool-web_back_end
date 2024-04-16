@@ -5,9 +5,7 @@ import re
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,separator: str) -> List[str]:
-    '''Filtering'''
-    for i in fields:
-        message = re.sub(i + "=.*?" + separator,
-                         i + "=" + redaction + separator,
-                         message)
+    '''Filtering values of the required fields'''
+    for item in fields:
+        message = re.sub(f"{item}=.*?{separator}",f"{item}={redaction}{separator}",message)
     return message
