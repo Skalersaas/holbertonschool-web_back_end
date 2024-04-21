@@ -5,7 +5,7 @@ from api.v1.auth.session_exp_auth import SessionExpAuth
 from datetime import datetime, timedelta
 from models.user_session import UserSession
 
-class SessionAuth(SessionExpAuth):
+class SessionDBAuth(SessionExpAuth):
     """ Child"""
     
     def create_session(self, user_id=None):
