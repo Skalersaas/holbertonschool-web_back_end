@@ -31,3 +31,8 @@ class Auth:
         """ Eh
         """
         return None
+
+
+class BasicAuth(Auth):
+    """ Child"""
+    pass
