@@ -18,8 +18,8 @@ if auth:
     from api.v1.auth.auth import Auth
     auth = Auth()
 
-@app.before_request()
-def beforeRequest():
+@app.before_request
+def beforeRequest(request):
     '''Before each request'''
     if auth is None or request.paths not in ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']:
         return
