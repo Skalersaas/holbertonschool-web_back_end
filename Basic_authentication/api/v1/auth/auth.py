@@ -3,6 +3,7 @@
 """
 from flask import request
 from typing import List, TypeVar
+import re
 
 
 class Auth:
@@ -15,10 +16,11 @@ class Auth:
             return True
 
         path = path if path[-1] == '/' else f"{path}/"
-        if path in excluded_paths:
-            return False
-        else:
-            return True
+        for ex in excluded_paths:
+            if re.search(excluded_paths, path):
+                return False
+
+        return True
 
     def authorization_header(self, request=None) -> str:
         """ Header
