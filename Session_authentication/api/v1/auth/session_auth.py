@@ -4,11 +4,10 @@
 import uuid
 from api.v1.auth.auth import Auth
 
+
 class SessionAuth(Auth):
     """ Child"""
-
     user_id_by_session_id = {}
-
 
     def create_session(self, user_id: str = None) -> str:
         """ Creating
