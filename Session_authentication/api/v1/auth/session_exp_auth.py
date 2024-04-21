@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Module for auth
 """
-import datetime
+from datetime import datetime, timedelta
 from api.v1.auth.session_auth import SessionAuth
 from os import getenv
 
@@ -28,15 +28,26 @@ class SessionExpAuth(SessionAuth):
         """GEt user"""
         if session_id is None:
             return None
-        if session_id not in self.user_id_by_session_id:
+
+        if session_id not in self.user_id_by_session_id.keys():
             return None
-        if self.SESSION_DURATION <= 0:
-            return self.user_id_by_session_id["user_id"]
-        if not self.user_id_by_session_id[session_id]:
+
+        session_dictionary = self.user_id_by_session_id.get(session_id)
+
+        if session_dictionary is None:
             return None
-        created_at = self.user_id_by_session_id["created_at"]
-        if datetime.timedelta(created_at + self.SESSION_DURATION) \
-        >datetime.datetime.now():
+
+        if self.session_duration <= 0:
+            return session_dictionary.get('user_id')
+
+        created_at = session_dictionary.get('created_at')
+
+        if created_at is None:
             return None
-        
-        return self.user_id_by_session_id["user_id"]
+
+        expired_time = created_at + timedelta(seconds=self.session_duration)
+
+        if expired_time < datetime.now():
+            return None
+
+        return session_dictionary.get('user_id')
