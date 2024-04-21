@@ -20,7 +20,10 @@ class Auth:
         for ex in excluded_paths:
             if not ex:
                 continue
-            if (ex[-1] == "*" and re.search(f"^{ex}", path)) or ex == path:
+            if ex[-1] == "*":
+                if re.search(f"^{ex}", path):
+                    return False
+            elif ex == path:
                 return False
         return True
 
