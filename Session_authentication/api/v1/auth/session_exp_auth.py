@@ -21,7 +21,7 @@ class SessionExpAuth(SessionAuth):
         if not s_id:
             return None
         self.user_id_by_session_id[s_id] = \
-        {"user_id": user_id, "created_at": datetime.datetime.now()}
+        {"user_id": user_id, "created_at": datetime.now()}
         return s_id
     
     def user_id_for_session_id(self, session_id: str = None) -> str:
