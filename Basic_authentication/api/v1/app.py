@@ -13,13 +13,15 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
-auth = getenv("AUTH_TYPE")
-if auth:
+AUTH_TYPE = getenv("AUTH_TYPE")
+
+if AUTH_TYPE:
     from api.v1.auth.auth import Auth
     auth = Auth()
 
+
 @app.before_request
-def beforeRequest(request):
+def beforeRequest() -> str:
     '''Before each request'''
     if auth is None:
         return
