@@ -31,3 +31,10 @@ def unauthorized() -> None:
     """ Endpoint for 401
     """
     abort(401)
+
+
+@app_views.route("/forbidden", methods=['GET'], strict_slashes=False)
+def forbidden() -> None:
+    """ Endpoint for 403
+    """
+    abort(403)
