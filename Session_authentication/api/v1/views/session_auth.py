@@ -39,6 +39,8 @@ def login():
 
 @app_views.route("/auth_session/logout", methods=["DELETE"], strict_slashes=False)
 def logout():
+    """ logout
+    """
     from api.v1.app import auth
     if not auth.destroy_sesion(request):
         return False, abort(404)
