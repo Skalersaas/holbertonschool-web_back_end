@@ -19,8 +19,9 @@ class Auth:
         for ex in excluded_paths:
             if not ex:
                 continue
+            l = len(ex)
             if ex[-1] == "*":
-                    if ex[:-1] == path[:len(ex)-1]:
+                    if ex[:-1] == path[:l-1]:
                         return False
             elif ex == path:
                 return False
