@@ -9,21 +9,35 @@ from os import getenv
 class SessionExpAuth(SessionAuth):
     """ SessionExpAuth
     """
-    def __init__(self) -> None:
+
+    def __init__(self):
+        """Constructor Method"""
+        SESSION_DURATION = getenv('SESSION_DURATION')
+
         try:
-            self.SESSION_DURATION = int(getenv("SESSION_DURATION"))
-        except:
-            self.SESSION_DURATION = 0
-    
-    def create_session(self, user_id: str = None) -> str:
-        '''Create'''
-        s_id = super().create_session(user_id)
-        if not s_id:
+            session_duration = int(SESSION_DURATION)
+        except Exception:
+            session_duration = 0
+
+        self.session_duration = session_duration
+
+    def create_session(self, user_id=None):
+        """Creation session with expiration"""
+
+        session_id = super().create_session(user_id)
+
+        if session_id is None:
             return None
-        self.user_id_by_session_id[s_id] = \
-        {"user_id": user_id, "created_at": datetime.now()}
-        return s_id
-    
+
+        session_dictionary = {
+            "user_id": user_id,
+            "created_at": datetime.now()
+        }
+
+        self.user_id_by_session_id[session_id] = session_dictionary
+
+        return session_id
+
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """GEt user"""
         if session_id is None:
