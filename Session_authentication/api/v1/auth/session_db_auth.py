@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """ Module for auth
 """
-from models.user_session import UserSession
 from api.v1.auth.session_exp_auth import SessionExpAuth
-
+from datetime import datetime, timedelta
+from models.user_session import UserSession
 
 class SessionAuth(SessionExpAuth):
     """ Child"""
@@ -18,6 +18,7 @@ class SessionAuth(SessionExpAuth):
         session = UserSession(**kwargs)
         session.save()
         return s_id
+
     def user_id_for_session_id(self, session_id=None):
         """User ID for Session ID Database"""
         if session_id is None:
