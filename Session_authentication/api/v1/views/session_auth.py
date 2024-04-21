@@ -28,5 +28,5 @@ def login():
     SESSION_NAME = getenv(SESSION_NAME)
     
     data = jsonify(user.to_json())
-    data.set_cookie(s_id, SESSION_NAME)
+    data.set_cookie(SESSION_NAME, s_id)
     return data
