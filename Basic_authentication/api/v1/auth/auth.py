@@ -12,7 +12,7 @@ class Auth:
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """ Require
         """
-        if path is None or not len(path) or excluded_paths is None or not len(excluded_paths):
+        if not path or not excluded_paths:
             return True
 
         path = path if path[-1] == '/' else f"{path}/"
@@ -21,8 +21,8 @@ class Auth:
             if not ex:
                 continue
             if ex[-1] == "*":
-                if re.search(f"^{ex}", path):
-                    return False
+                    if ex[:-1] == path[:len(ex)-1]:
+                        return False
             elif ex == path:
                 return False
         return True
