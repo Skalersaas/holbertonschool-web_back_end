@@ -77,10 +77,10 @@ class BasicAuth(Auth):
         decoded = self.decode_base64_authorization_header(exctracted)
         if decoded is None:
             return None
-        user_creds = self.extract_base64_authorization_header(decoded)
-        if user_creds is (None, None):
+        email, pwd = self.extract_base64_authorization_header(decoded)
+        if email is None or pwd is None:
             return None
-        user = self.user_object_from_credentials(user_creds[0], user_creds[1])
+        user = self.user_object_from_credentials(email, pwd)
         if user is None:
             return None
         return user
