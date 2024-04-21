@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Module for auth
 """
+from typing import TypeVar
 import uuid
 from api.v1.auth.auth import Auth
 
