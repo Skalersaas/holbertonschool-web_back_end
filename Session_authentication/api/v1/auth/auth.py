@@ -36,6 +36,7 @@ class Auth:
         """ Eh
         """
         return None
+
     def session_cookie(self, request=None):
         """ Session
         """
