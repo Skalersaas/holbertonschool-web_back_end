@@ -11,14 +11,14 @@ class Auth:
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """ Demo now
         """
-        return False, path
+        return False
 
     def authorization_header(self, request=None) -> str:
         """ Demo again
         """
-        return None, request
+        return None
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ Eh
         """
-        return {None, request}
+        return None
