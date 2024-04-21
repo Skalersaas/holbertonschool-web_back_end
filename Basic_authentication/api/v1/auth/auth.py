@@ -20,10 +20,7 @@ class Auth:
             if not ex:
                 continue
             l = len(ex)
-            if ex[-1] == "*":
-                    if ex[:-1] == path[:l-1]:
-                        return False
-            elif ex == path:
+            if (ex[-1] == "*" and ex[:-1] == path[:l-1]) or ex == path:
                 return False
         return True
 
