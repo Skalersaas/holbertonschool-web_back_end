@@ -15,8 +15,9 @@ class Auth:
         if path is None or excluded_paths is None or not len(excluded_paths):
             return True
         for ex in excluded_paths:
-            if re.search(f"^{ex}", path):
-                return False
+            if ex:
+                if re.search(f"^{ex}", path):
+                    return False
 
         return True
 
