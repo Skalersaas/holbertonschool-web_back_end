@@ -9,7 +9,7 @@ class Auth:
     """ Auth class
     """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ Demo now
+        """ Require
         """
         if path is None or excluded_paths is None or not len(excluded_paths):
             return True
@@ -21,9 +21,11 @@ class Auth:
             return True
 
     def authorization_header(self, request=None) -> str:
-        """ Demo again
+        """ Header
         """
-        return None
+        if request is None:
+            return None
+        return request.headers.get("Authorization", None)
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ Eh
