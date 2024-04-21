@@ -31,7 +31,7 @@ def login():
     user = users[0]
     s_id = auth.create_session(user.id)
     SESSION_NAME = getenv("SESSION_NAME")
-    
+
     data = jsonify(user.to_json())
     data.set_cookie(SESSION_NAME, s_id)
     return data
