@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Module of Users views
+""" Module of session authentication views
 """
 from api.v1.views import app_views
 from flask import jsonify, request
@@ -11,7 +11,7 @@ from os import getenv
 def login():
     """ Login
     """
-    email, pwd = request.form.get()
+    email, pwd = request.form.get("email"), request.form.get("password")
     if not email:
         return jsonify({"error": "email missing"}), 400  
     if not pwd:
