@@ -59,7 +59,15 @@ class DB:
             return None
 
         user = self.find_user_by(id=user_id)
+
+        cols_keys = User.__table__.columns.keys()
+        for key in kwargs.keys():
+            if key not in cols_keys:
+                raise InvalidRequestError
+        user = self._session.query(User).filter_by(**kwargs).first()
+
         for key, value in kwargs.items():
             setattr(user, key, value)
+        
 
         self._session.commit()
