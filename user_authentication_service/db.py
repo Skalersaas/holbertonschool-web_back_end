@@ -42,3 +42,13 @@ class DB:
         """Finding user by params"""
         if not kwargs:
             return InvalidRequestError
+
+        cols_keys = User.__table__.columns.keys()
+        for key in kwargs.keys():
+            if key not in cols_keys:
+                raise InvalidRequestError
+        user = self._session.query(User).filter_by(**kwargs).first()
+
+        if user is None:
+            return NoResultFound
+        return user
