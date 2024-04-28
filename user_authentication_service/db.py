@@ -63,8 +63,7 @@ class DB:
         cols_keys = User.__table__.columns.keys()
         for key in kwargs.keys():
             if key not in cols_keys:
-                raise InvalidRequestError
-        user = self._session.query(User).filter_by(**kwargs).first()
+                raise ValueError
 
         for key, value in kwargs.items():
             setattr(user, key, value)
