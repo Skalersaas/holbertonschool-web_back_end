@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
-
-from flask import Flask
-from flask import jsonify
-from flask import request
-from flask import abort
-from flask import redirect
+"""app module"""
+from flask import Flask, abort, jsonify, request, redirect
 from auth import Auth
 
 app = Flask(__name__)
@@ -12,129 +8,100 @@ AUTH = Auth()
 
 
 @app.route('/', methods=['GET'])
-def hello_world() -> str:
-    msg = {"message": "Bienvenue"}
-    return jsonify(msg)
+def index():
+    """ GET /
+    Return:
+      - welcome message
+    """
+    return jsonify({"message": "Bienvenue"})
 
 
 @app.route('/users', methods=['POST'])
 def register_user() -> str:
-
+    """ Make a new user """
     try:
         email = request.form['email']
-        password = request.form['password']
+        pwd = request.form['password']
     except KeyError:
         abort(400)
 
     try:
-        user = AUTH.register_user(email, password)
+        user = AUTH.register_user(email, pwd)
     except ValueError:
-        return jsonify({"message": "email already registered"}), 400
+        msg = {"message": "email already registered"}
+        return jsonify(msg), 400
 
-    msg = {"email": email, "message": "user created"}
+    msg = {"email": user.email, "message": "user created"}
+
     return jsonify(msg)
 
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """ POST /sessions
-    Creates new session for user, stores as cookie
-    Email and pswd fields in x-www-form-urlencoded request
-    Return:
-      - JSON payload
-    """
-    form_data = request.form
+    """login function"""
+    email = request.form.get("email")
+    password = request.form.get("password")
 
-    if "email" not in form_data:
-        return jsonify({"message": "email required"}), 400
-    elif "password" not in form_data:
-        return jsonify({"message": "password required"}), 400
+    if AUTH.valid_login(email, password):
+        session_id = AUTH.create_session(email)
+        response = jsonify({"email": "{}".format(email),
+                            "message": "logged in"})
+        response.set_cookie("session_id", session_id)
+        return response
     else:
-
-        email = request.form.get("email")
-        pswd = request.form.get("password")
-
-        if AUTH.valid_login(email, pswd) is False:
-            abort(401)
-        else:
-            session_id = AUTH.create_session(email)
-            response = jsonify({
-                "email": email,
-                "message": "logged in"
-                })
-            response.set_cookie('session_id', session_id)
-
-            return response
+        abort(401)
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout() -> None:
-    """Find the user with the requested session ID.
-    If the user exists destroy the session and redirect the user to GET /.
-    If the user does not exist, respond with a 403 HTTP status.
-    """
-    session_id = request.cookies.get('session_id')
-    user = AUTH.get_user_from_session_id(session_id)
-    if not user:
+def logout() -> str:
+    """logout function"""
+    session_id = request.cookies.get("session_id")
+    try:
+        user = AUTH.get_user_from_session_id(session_id)
+        AUTH.destroy_session(user.id)
+        return redirect('/', 302)
+    except Exception:
         abort(403)
-    AUTH.destroy_session(user.id)
-    return redirect('/')
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile() -> str:
-    """response to the GET /profile"""
-    session_id = request.cookies.get('session_id')
-    user = AUTH.get_user_from_session_id(session_id)
-    if user:
+    """profile function"""
+    session_id = request.cookies.get("session_id")
+    try:
+        user = AUTH.get_user_from_session_id(session_id)
         return jsonify({"email": user.email}), 200
-    else:
+    except Exception:
         abort(403)
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
 def get_reset_password_token() -> str:
-    """generate a token and respond with a 200 HTTP status"""
-    try:
-        email = request.form['email']
-    except KeyError:
-        abort(403)
-
+    """get_reset_password_token function"""
+    email = request.form.get("email")
     try:
         reset_token = AUTH.get_reset_password_token(email)
-    except ValueError:
+        return jsonify({"email": email, "reset_token": reset_token}), 200
+    except Exception:
         abort(403)
-
-    msg = {"email": email, "reset_token": reset_token}
-
-    return jsonify(msg), 200
 
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
 def update_password() -> str:
-    """ Update the password
-    PUT /reset_password
-    Updates password with reset token
+    """update_password function
     Return:
-        - 400 if bad request
-        - 403 if not valid reset token
-        - 200 and JSON Payload if valid
+      - update password
     """
-    try:
-        email = request.form['email']
-        reset_token = request.form['reset_token']
-        new_password = request.form['new_password']
-    except KeyError:
-        abort(400)
+    email = request.form.get("email")
+    reset_token = request.form.get("reset_token")
+    new_password = request.form.get("new_password")
 
     try:
         AUTH.update_password(reset_token, new_password)
-    except ValueError:
+        return jsonify({"email": email, "message": "Password updated"}), 200
+    except Exception:
         abort(403)
 
-    msg = {"email": email, "message": "Password updated"}
-    return jsonify(msg), 200
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+if __name__ == '__main__':
+    app.run()
