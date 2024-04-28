@@ -50,5 +50,5 @@ class DB:
         user = self._session.query(User).filter_by(**kwargs).first()
 
         if user is None:
-            return NoResultFound
+            raise NoResultFound
         return user
