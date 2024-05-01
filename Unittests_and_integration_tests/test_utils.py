@@ -2,7 +2,7 @@
 """Test utils module"""
 from unittest import TestCase
 from parameterized import parameterized
-
+from utils import access_nested_map
 
 class TestAccessNestedMap(TestCase):
     """Base class"""
@@ -14,4 +14,4 @@ class TestAccessNestedMap(TestCase):
     ])
     def test_access_nested_map(self, input, map, output):
         """Joriki ejji"""
-        return self.assertEqual(input, map, output)
+        return self.assertEqual(access_nested_map(input, map), output)
