@@ -46,16 +46,20 @@ class TestMemoize(TestCase):
     """Testing Memoize"""
     
     def test_memoize(self):
+        """testing"""
         class TestClass:
+            """Test classs"""
             def a_method(self):
+                """A method"""
                 return 42
 
             @memoize
             def a_property(self):
+                """A property"""
                 return self.a_method()
+
         with mock.patch("TestClass.a_method") as patch:
             t_class = TestClass()
             t_class.a_property()
             t_class.a_property()
             patch.assert_called_once()
-            
