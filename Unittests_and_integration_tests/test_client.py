@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 """TEsting client.py"""
-
-
 from unittest import TestCase, mock
 from parameterized import parameterized
 from client import GithubOrgClient
