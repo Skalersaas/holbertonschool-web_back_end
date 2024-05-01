@@ -21,7 +21,7 @@ app.config.from_object(Config)
 def home():
     """ Home Page
     """
-    return render_template('1-index.html')
+    return render_template('2-index.html')
 
 
 @babel.localeselector
