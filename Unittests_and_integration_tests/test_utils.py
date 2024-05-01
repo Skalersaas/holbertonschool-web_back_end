@@ -23,7 +23,7 @@ class TestAccessNestedMap(TestCase):
     def test_access_nested_map_exception(self, input, map):
         """Exception Testing"""
         with self.assertRaises(KeyError) as err:
-            access_nested_map(input,map)
+            access_nested_map(input, map)
         self.assertEqual(
-            f'KeyError{err.exception}', repr(err.exception)
+            f'KeyError({err.exception})', repr(err.exception)
         )
