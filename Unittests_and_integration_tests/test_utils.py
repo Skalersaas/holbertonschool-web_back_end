@@ -47,8 +47,10 @@ class TestMemoize(TestCase):
     
     def test_memoize(self):
         """testing"""
+
         class TestClass:
             """Test classs"""
+
             def a_method(self):
                 """A method"""
                 return 42
