@@ -42,6 +42,7 @@ class TestGetJson(TestCase):
             patch.return_value.json.return_value = payload
             self.assertEqual(get_json(url=url), payload)
 
+
 class TestMemoize(TestCase):
     """Testing Memoize"""
     
