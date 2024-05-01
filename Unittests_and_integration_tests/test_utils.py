@@ -45,7 +45,7 @@ class TestGetJson(TestCase):
 
 class TestMemoize(TestCase):
     """Testing Memoize"""
-    
+
     def test_memoize(self):
         """testing"""
 
