@@ -25,10 +25,10 @@ def home():
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> str:
     """Get locale"""
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", "5000")
+    app.run("0.0.0.0", 5000)
