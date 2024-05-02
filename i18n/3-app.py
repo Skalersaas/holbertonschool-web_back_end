@@ -20,7 +20,7 @@ app.config.from_object(Config)
 
 
 @app.route('/')
-def home():
+def home() -> str:
     """ Home Page
     """
     return render_template('3-index.html')
