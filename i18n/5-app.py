@@ -24,6 +24,7 @@ babel = Babel(app)
 
 
 def get_user(id):
+    """Getting user"""
     return users.get(int(id))
 
 
@@ -44,6 +45,7 @@ def home():
 
 @app.before_request
 def b_req():
+    """Before request"""
     id = request.args.get("login_as")
     if id:
         user = get_user(id)
