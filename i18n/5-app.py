@@ -49,9 +49,7 @@ def home():
 @app.before_request
 def b_req():
     """Before request"""
-    user = get_user(id)
-    if user:
-        g.user = user
+    g.user = get_user(id)
 
 
 if __name__ == "__main__":
