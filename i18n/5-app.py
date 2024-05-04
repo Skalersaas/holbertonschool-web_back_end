@@ -11,6 +11,7 @@ users = {
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
+
 class Config(object):
     """Setups"""
     LANGUAGES = ["en", "fr"]
@@ -19,17 +20,20 @@ class Config(object):
 
 
 app.config.from_object(Config)
+babel = Babel(app)
+
 
 def get_user(id):
     return users.get(int(id))
 
+
+@babel.localeselector
 def get_locale():
     """Get locale"""
     lang = request.args.get("locale")
 
     return lang
 
-babel = Babel(app, locale_selector=get_locale)
 
 @app.route('/')
 def home():
@@ -45,6 +49,7 @@ def b_req():
         user = get_user(id)
         if user:
             g.user = user
+
 
 if __name__ == "__main__":
     app.run("0.0.0.0", 5000)
