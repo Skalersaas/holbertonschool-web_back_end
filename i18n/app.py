@@ -2,6 +2,7 @@
 """Base flask app"""
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
+from typing import Union
 
 app = Flask(__name__)
 users = {
@@ -23,7 +24,7 @@ app.config.from_object(Config)
 # babel = Babel(app)
 
 
-def get_user(id):
+def get_user(id: int) -> Union[dict, None]:
     """Getting user"""
     id = request.args.get("login_as")
     if id:

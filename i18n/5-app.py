@@ -24,11 +24,13 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-def get_user(id: int) -> Union[dict, None]:
+def get_user() -> Union[dict, None]:
     """Getting user"""
     id = request.args.get("login_as")
     if id:
-        return users.get(int(id))
+        user: dict = {}
+        user[id] = users.get(int(id)) 
+        return user[id]
 
 
 @babel.localeselector
@@ -50,7 +52,7 @@ def home():
 @app.before_request
 def b_req():
     """Before request"""
-    user = get_user(id)
+    user = get_user()
     if user:
         g.user = user
 
