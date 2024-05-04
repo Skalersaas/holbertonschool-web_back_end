@@ -23,7 +23,7 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-def get_user(id):
+def get_user():
     """Getting user"""
     id = request.args.get("login_as")
     if id:
@@ -49,7 +49,7 @@ def home():
 @app.before_request
 def b_req():
     """Before request"""
-    g.user = get_user(id)
+    g.user = get_user()
 
 
 if __name__ == "__main__":
