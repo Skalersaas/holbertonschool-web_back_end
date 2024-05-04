@@ -26,7 +26,7 @@ babel = Babel(app)
 def get_user(id):
     """Getting user"""
     id = request.args.get("login_as")
-    if id in users.keys():
+    if id:
         return users.get(int(id))
 
 
