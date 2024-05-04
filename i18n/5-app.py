@@ -2,7 +2,6 @@
 """Base flask app"""
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
-from typing import Union
 
 app = Flask(__name__)
 users = {
@@ -24,13 +23,11 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-def get_user() -> Union[dict, None]:
+def get_user(id):
     """Getting user"""
     id = request.args.get("login_as")
     if id:
-        user: dict = {}
-        user[id] = users.get(int(id)) 
-        return user[id]
+        return users.get(int(id))
 
 
 @babel.localeselector
@@ -52,7 +49,7 @@ def home():
 @app.before_request
 def b_req():
     """Before request"""
-    user = get_user()
+    user = get_user(id)
     if user:
         g.user = user
 
