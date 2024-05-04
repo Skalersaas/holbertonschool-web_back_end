@@ -20,6 +20,7 @@ class Config(object):
 
 
 app.config.from_object(Config)
+# babel = Babel(app)
 
 
 def get_user(id):
@@ -28,16 +29,18 @@ def get_user(id):
     if id:
         return users.get(int(id))
 
-
+# @babel.localeselector
 def get_locale():
     """Get locale"""
     locale = request.args.get("locale")
     if locale in app.config['LANGUAGES']:
         print("sad")
         return locale
-    return request.accept_languages.best_match(Config.LANGUAGES)    
+    return request.accept_languages.best_match(Config.LANGUAGES)
+
 
 babel = Babel(app, locale_selector=get_locale)
+
 
 @app.route('/')
 def home():

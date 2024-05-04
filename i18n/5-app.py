@@ -26,16 +26,18 @@ babel = Babel(app)
 def get_user(id):
     """Getting user"""
     id = request.args.get("login_as")
-    return users.get(int(id))
+    if id:
+        return users.get(int(id))
 
 
 @babel.localeselector
 def get_locale():
     """Get locale"""
     locale = request.args.get("locale")
-    if locale in Config.LANGUAGES:
+    if locale in app.config['LANGUAGES']:
+        print("sad")
         return locale
-    return request.accept_languages.best_match(Config.LANGUAGES)    
+    return request.accept_languages.best_match(Config.LANGUAGES)
 
 
 @app.route('/')
