@@ -25,15 +25,14 @@ babel = Babel(app)
 
 def get_user(id):
     """Getting user"""
+    id = request.args.get("login_as")
     return users.get(int(id))
 
 
 @babel.localeselector
 def get_locale():
     """Get locale"""
-    lang = request.args.get("locale")
-
-    return lang
+    return request.args.get("locale")
 
 
 @app.route('/')
@@ -46,11 +45,9 @@ def home():
 @app.before_request
 def b_req():
     """Before request"""
-    id = request.args.get("login_as")
-    if id:
-        user = get_user(id)
-        if user:
-            g.user = user
+    user = get_user(id)
+    if user:
+        g.user = user
 
 
 if __name__ == "__main__":
