@@ -32,7 +32,10 @@ def get_user(id):
 @babel.localeselector
 def get_locale():
     """Get locale"""
-    return request.args.get("locale")
+    locale = request.args.get("locale")
+    if locale in Config.LANGUAGES:
+        return locale
+    return request.accept_languages.best_match(Config.LANGUAGES)    
 
 
 @app.route('/')

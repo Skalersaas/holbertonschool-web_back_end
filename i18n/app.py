@@ -11,6 +11,7 @@ users = {
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
+
 class Config(object):
     """Setups"""
     LANGUAGES = ["en", "fr"]
@@ -20,14 +21,21 @@ class Config(object):
 
 app.config.from_object(Config)
 
+
 def get_user(id):
-    return users.get(int(id))
+    """Getting user"""
+    id = request.args.get("login_as")
+    if id:
+        return users.get(int(id))
+
 
 def get_locale():
     """Get locale"""
-    lang = request.args.get("locale")
-
-    return lang
+    locale = request.args.get("locale")
+    if locale in app.config['LANGUAGES']:
+        print("sad")
+        return locale
+    return request.accept_languages.best_match(Config.LANGUAGES)    
 
 babel = Babel(app, locale_selector=get_locale)
 
@@ -40,11 +48,11 @@ def home():
 
 @app.before_request
 def b_req():
-    id = request.args.get("login_as")
-    if id:
-        user = get_user(id)
-        if user:
-            g.user = user
+    """Before request"""
+    user = get_user(id)
+    if user:
+        g.user = user
+
 
 if __name__ == "__main__":
     app.run("0.0.0.0", 5000)
