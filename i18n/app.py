@@ -24,16 +24,16 @@ app.config.from_object(Config)
 # babel = Babel(app)
 
 
-def get_user(id: int) -> Union[dict, None]:
+def get_user() -> Union[dict, None]:
     """Getting user"""
     id = request.args.get("login_as")
-    if id:
+    if id and type(id) == int:
         return users.get(int(id))
 
 # @babel.localeselector
 def get_locale():
     """Get locale"""
-    locale = request.args.get("locale")
+    locale = request.args.get("locale", None)
     if locale in app.config['LANGUAGES']:
         print("sad")
         return locale
@@ -53,7 +53,7 @@ def home():
 @app.before_request
 def b_req():
     """Before request"""
-    g.user = get_user(id)
+    g.user = get_user()
 
 
 if __name__ == "__main__":
