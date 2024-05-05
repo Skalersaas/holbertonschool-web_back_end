@@ -39,17 +39,17 @@ def get_locale():
         return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
-@app.before_request
-def b_req():
-    """Before request"""
-    g.user = get_user()
-
-
 @app.route('/')
 def home():
     """ Home Page
     """
     return render_template('5-index.html')
+
+
+@app.before_request
+def b_req():
+    """Before request"""
+    g.user = get_user()
 
 
 if __name__ == "__main__":
