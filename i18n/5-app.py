@@ -6,10 +6,10 @@ from typing import Union
 
 app = Flask(__name__)
 users = {
-    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
-    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
-    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
-    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+    "1": {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    "2": {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    "3": {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    "4": {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
 
@@ -26,10 +26,7 @@ babel = Babel(app)
 
 def get_user() -> Union[dict, None]:
     """Getting user"""
-    try: 
-        return users.get(int(request.args.get('login_as')))
-    except RuntimeError:
-        return None
+    return users.get(request.args.get('login_as', None))
 
 
 @babel.localeselector
