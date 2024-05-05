@@ -6,10 +6,10 @@ from typing import Union
 
 app = Flask(__name__)
 users = {
-    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
-    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
-    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
-    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+    "1": {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    "2": {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    "3": {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    "4": {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
 
@@ -26,20 +26,17 @@ app.config.from_object(Config)
 
 def get_user() -> Union[dict, None]:
     """Getting user"""
-    try: 
-        return users.get(int(request.args.get('login_as')))
-    except:
-        return None
+    return users.get(request.args.get('login_as', None))
 
 
 # @babel.localeselector
 def get_locale():
     """Get locale"""
-    l = request.args.get("locale")
-    if l in Config.LANGUAGES:
-        return l
+    lang = request.args.get("locale")
+    if lang in app.config["LANGUAGES"]:
+        return lang
     else:
-        return request.accept_languages.best_match(Config.LANGUAGES)
+        return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
 babel = Babel(app, locale_selector=get_locale)
