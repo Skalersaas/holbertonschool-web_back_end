@@ -14,7 +14,7 @@
     <p>{{ gettext('not_logged_in') }}</p>
     {% endif %}
     {% if g.current_time %}
-    <p>{{ gettext('current_time_is', current_time=current_time) }}</p>
+    <p>{{ gettext('current_time_is', current_time=g.current_time) }}</p>
     {% endif %}
   </body>
 </html>
