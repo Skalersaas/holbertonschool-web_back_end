@@ -58,7 +58,7 @@ def home():
 
 
 @app.before_request
-def b_req():
+def before_request():
     """Before request"""
     g.user = get_user()
 
