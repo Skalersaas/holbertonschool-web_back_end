@@ -6,10 +6,10 @@ from typing import Union
 
 app = Flask(__name__)
 users = {
-    "1": {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
-    "2": {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
-    "3": {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
-    "4": {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
 
@@ -35,7 +35,7 @@ def get_user() -> Union[dict, None]:
         return None
 
     user: dict = {}
-    user[login_user] = users.get(login_user)
+    user[login_user] = users.get(int(login_user))
 
     return user[login_user]
 
