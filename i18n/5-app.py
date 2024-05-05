@@ -28,7 +28,7 @@ def get_user() -> Union[dict, None]:
     """Getting user"""
     try: 
         return users.get(int(request.args.get('login_as')))
-    except:
+    except RuntimeError:
         return None
 
 
