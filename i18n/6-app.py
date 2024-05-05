@@ -61,7 +61,7 @@ def get_locale():
 def home():
     """ Home Page
     """
-    return render_template('5-index.html')
+    return render_template('6-index.html')
 
 
 @app.before_request
