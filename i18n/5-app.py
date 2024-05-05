@@ -31,6 +31,7 @@ def get_user() -> Union[dict, None]:
     except:
         return None
 
+
 @babel.localeselector
 def get_locale():
     """Get locale"""
