@@ -21,10 +21,10 @@ babel = Babel(app)
 def get_locale():
     """Get locale"""
     l = request.args.get("locale")
-    if l in app.config['LANGUAGES']:
+    if l in app.config["LANGUAGES"]:
         return l
     else:
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
+        return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
 @app.route('/')
