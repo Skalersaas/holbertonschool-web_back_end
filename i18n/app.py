@@ -26,7 +26,6 @@ app.config.from_object(Config)
 
 def get_user() -> Union[dict, None]:
     """Getting user"""
-    print(users.get(request.args.get('login_as', None)))
     return users.get(int(request.args.get('login_as', None)))
 
 
