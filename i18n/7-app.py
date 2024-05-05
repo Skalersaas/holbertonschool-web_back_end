@@ -22,7 +22,7 @@ class Config(object):
 
 
 app.config.from_object(Config)
-# babel = Babel(app)
+babel = Babel(app)
 
 
 def get_user() -> Union[dict, None]:
@@ -41,7 +41,7 @@ def get_user() -> Union[dict, None]:
     return user[login_user]
 
 
-# @babel.localeselector
+@babel.localeselector
 def get_locale():
     """Get locale"""
     lang = request.args.get("locale")
@@ -54,23 +54,29 @@ def get_locale():
 
     return Config.BABEL_DEFAULT_LOCALE
 
-# @babel.timezoneselector
+@babel.timezoneselector
 def get_timezone():
     try:
         timezone = request.args.get("timezone")
         if timezone:
-            tzone = pytz.timezone(timezone)
+            pytz.timezone(timezone)
         elif g.user:
-            tzone = pytz.timezone(g.user["timezone"])
+            timezone = g.user["timezone"]
+            pytz.timezone(timezone)
         else:
-            tzone = pytz.timezone(Config.BABEL_DEFAULT_TIMEZONE)
-babel = Babel(app, locale_selector=get_locale)
+            timezone = Config.BABEL_DEFAULT_TIMEZONE
+            pytz.timezone(timezone)
+    except exceptions.UnknownTimeZoneError:
+        timezone = 'UTC'
+
+    return timezone
+
 
 @app.route('/')
 def home():
     """ Home Page
     """
-    return render_template('5-index.html')
+    return render_template('6-index.html')
 
 
 @app.before_request
