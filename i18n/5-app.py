@@ -25,8 +25,19 @@ babel = Babel(app)
 
 
 def get_user() -> Union[dict, None]:
-    """Getting user"""
-    return users.get(request.args.get('login_as', None))
+    """ Get the user of the dict
+
+        Return User
+    """
+    login_user = request.args.get('login_as', None)
+
+    if login_user is None:
+        return None
+
+    user: dict = {}
+    user[login_user] = users.get(int(login_user))
+
+    return user[login_user]
 
 
 @babel.localeselector
