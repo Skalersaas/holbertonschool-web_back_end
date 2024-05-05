@@ -6,10 +6,10 @@ from typing import Union
 
 app = Flask(__name__)
 users = {
-    "1": {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
-    "2": {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
-    "3": {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
-    "4": {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
 
@@ -26,7 +26,8 @@ app.config.from_object(Config)
 
 def get_user() -> Union[dict, None]:
     """Getting user"""
-    return users.get(request.args.get('login_as', None))
+    print(users.get(request.args.get('login_as', None)))
+    return users.get(int(request.args.get('login_as', None)))
 
 
 # @babel.localeselector
@@ -38,9 +39,7 @@ def get_locale():
     else:
         return request.accept_languages.best_match(app.config["LANGUAGES"])
 
-
 babel = Babel(app, locale_selector=get_locale)
-
 
 @app.route('/')
 def home():
@@ -50,7 +49,7 @@ def home():
 
 
 @app.before_request
-def b_req():
+def before_request():
     """Before request"""
     g.user = get_user()
 
