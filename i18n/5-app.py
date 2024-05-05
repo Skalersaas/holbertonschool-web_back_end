@@ -2,6 +2,7 @@
 """Base flask app"""
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
+from typing import Union
 
 app = Flask(__name__)
 users = {
@@ -23,20 +24,21 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-def get_user():
+def get_user() -> Union[dict, None]:
     """Getting user"""
-    id = request.args.get("login_as")
-    if id and type(id) == int:
-        return users.get(int(id))
-
+    try: 
+        return users.get(int(request.args.get('login_as')))
+    except:
+        return None
 
 @babel.localeselector
 def get_locale():
     """Get locale"""
-    locale = request.args.get("locale")
-    if locale in app.config['LANGUAGES']:
-        return locale
-    return request.accept_languages.best_match(Config.LANGUAGES)
+    l = request.args.get("locale")
+    if l in Config.LANGUAGES:
+        return l
+    else:
+        return request.accept_languages.best_match(Config.LANGUAGES)
 
 
 @app.route('/')

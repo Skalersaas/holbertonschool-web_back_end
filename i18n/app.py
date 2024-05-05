@@ -26,18 +26,19 @@ app.config.from_object(Config)
 
 def get_user() -> Union[dict, None]:
     """Getting user"""
-    id = request.args.get("login_as")
-    if id and type(id) == int:
-        return users.get(int(id))
+    try: 
+        return users.get(int(request.args.get('login_as')))
+    except:
+        return None
 
 # @babel.localeselector
 def get_locale():
     """Get locale"""
-    locale = request.args.get("locale", None)
-    if locale in app.config['LANGUAGES']:
-        print("sad")
-        return locale
-    return request.accept_languages.best_match(Config.LANGUAGES)
+    l = request.args.get("locale")
+    if l in Config.LANGUAGES:
+        return l
+    else:
+        return request.accept_languages.best_match(Config.LANGUAGES)
 
 
 babel = Babel(app, locale_selector=get_locale)
