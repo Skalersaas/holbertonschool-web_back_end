@@ -35,7 +35,7 @@ def get_user() -> Union[dict, None]:
         return None
 
     user: dict = {}
-    user[login_user] = users.get(int(login_user))
+    user[login_user] = users.get(login_user)
 
     return user[login_user]
 
