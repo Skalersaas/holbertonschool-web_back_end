@@ -21,7 +21,7 @@ class Config(object):
 
 
 app.config.from_object(Config)
-# babel = Babel(app)
+babel = Babel(app)
 
 
 def get_user() -> Union[dict, None]:
@@ -40,7 +40,7 @@ def get_user() -> Union[dict, None]:
     return user[login_user]
 
 
-# @babel.localeselector
+@babel.localeselector
 def get_locale():
     """Get locale"""
     lang = request.args.get("locale")
@@ -56,7 +56,6 @@ def get_locale():
         
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
-babel = Babel(app, locale_selector=get_locale)
 
 @app.route('/')
 def home():
