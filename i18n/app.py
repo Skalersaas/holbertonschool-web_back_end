@@ -55,15 +55,21 @@ def get_locale():
     return Config.BABEL_DEFAULT_LOCALE
 
 # @babel.timezoneselector
-def get_timezone():
+def get_timezone() -> str:
     try:
         timezone = request.args.get("timezone")
         if timezone:
-            tzone = pytz.timezone(timezone)
+            pytz.timezone(timezone)
         elif g.user:
-            tzone = pytz.timezone(g.user["timezone"])
+            timezone = g.user["timezone"]
+            pytz.timezone(timezone)
         else:
-            tzone = pytz.timezone(Config.BABEL_DEFAULT_TIMEZONE)
+            timezone = Config.BABEL_DEFAULT_TIMEZONE
+            pytz.timezone(timezone)
+    except pytz.UnknownTimeZoneError:
+        timezone = 'UTC'
+
+    return timezone
 babel = Babel(app, locale_selector=get_locale)
 
 @app.route('/')

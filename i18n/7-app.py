@@ -55,7 +55,7 @@ def get_locale():
     return Config.BABEL_DEFAULT_LOCALE
 
 @babel.timezoneselector
-def get_timezone():
+def get_timezone() -> str:
     try:
         timezone = request.args.get("timezone")
         if timezone:
@@ -66,7 +66,7 @@ def get_timezone():
         else:
             timezone = Config.BABEL_DEFAULT_TIMEZONE
             pytz.timezone(timezone)
-    except exceptions.UnknownTimeZoneError:
+    except pytz.UnknownTimeZoneError:
         timezone = 'UTC'
 
     return timezone
@@ -76,7 +76,7 @@ def get_timezone():
 def home():
     """ Home Page
     """
-    return render_template('6-index.html')
+    return render_template('7-index.html')
 
 
 @app.before_request
