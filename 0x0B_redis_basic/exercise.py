@@ -35,6 +35,6 @@ class Cache():
         """Get int"""
         val = self._redis.get(key)
         try:
-            return int(val)
+            return int(val.decode('utf-8'))
         except Exception:
             return 0
