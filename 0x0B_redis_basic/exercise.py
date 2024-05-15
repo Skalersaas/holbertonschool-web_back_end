@@ -44,7 +44,7 @@ def replay(method: Callable):
     outputs = r.lrange(qn+":outputs", 0, -1)
     
     for i in range(len(inputs)):
-        print(f"{qn}(*('{inputs[i]}',)) -> {outputs[i]}")
+        print(f"{qn}(*{inputs[i].decode('utf-8')}) -> {outputs[i].decode('utf-8')}")
 
 class Cache():
     """Cache class"""
