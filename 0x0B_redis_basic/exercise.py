@@ -53,8 +53,9 @@ def replay(method: Callable):
             output.decode('utf-8')
         except Exception:
             output = ""
-            
+
         print(f"{qn}(*{input}) -> {output}")
+
 
 class Cache():
     """Cache class"""
