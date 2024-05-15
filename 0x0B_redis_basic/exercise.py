@@ -77,7 +77,7 @@ class Cache():
         return key
 
     def get(self, key: str, fn: Optional[Callable] = None) ->\
-        Union[str, bytes, int, float]:
+            Union[str, bytes, int, float]:
         """Get"""
         val = self._redis.get(key)
         if fn:
