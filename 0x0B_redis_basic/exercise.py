@@ -26,3 +26,15 @@ class Cache():
             return fn(val)
 
         return val
+
+    def get_str(self, key: str) -> str:
+        """Get string"""
+        return self._redis.get(key).decode('utf-8')
+
+    def get_int(self, key: str) -> str:
+        """Get int"""
+        val = self._redis.get(key)
+        try:
+            return int(val)
+        except Exception:
+            return 0
