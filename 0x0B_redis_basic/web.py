@@ -11,7 +11,7 @@ r = redis.Redis()
 def counter(method: Callable) -> Callable:
     """Counts"""
     
-    @wraps
+    @wraps(method)
     def wrapper(url):
         r.incr(f'count:{url}')
         html = r.get(f'cached:{url}')
