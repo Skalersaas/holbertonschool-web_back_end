@@ -31,7 +31,7 @@ class Cache():
         """Get string"""
         return self._redis.get(key).decode('utf-8')
 
-    def get_int(self, key: str) -> str:
+    def get_int(self, key: str) -> int:
         """Get int"""
         val = self._redis.get(key)
         try:
