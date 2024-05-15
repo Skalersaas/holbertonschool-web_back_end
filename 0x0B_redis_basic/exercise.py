@@ -10,8 +10,8 @@ from functools import wraps
 def count_calls(method: Callable) -> Callable:
     """Decorator"""
     key = method.__qualname__
-    @wraps(method)
 
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         '''wrapper'''
         self._redis.incr(key)
@@ -26,7 +26,7 @@ def call_history(method: Callable) -> Callable:
     def wrapper(self, *args, **kwargs):
         '''wrapper'''
         input = str(args)
-        output = str(method(self, *args,**kwargs)) 
+        output = str(method(self, *args, **kwargs))
         self._redis.rpush(method.__qualname__ + ":inputs", input)
         self._redis.rpush(method.__qualname__ + ":outputs", output)
         return output
@@ -76,7 +76,8 @@ class Cache():
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
+    def get(self, key: str, fn: Optional[Callable] = None) ->\
+        Union[str, bytes, int, float]:
         """Get"""
         val = self._redis.get(key)
         if fn:
