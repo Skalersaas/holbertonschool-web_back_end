@@ -5,6 +5,7 @@ import redis
 from uuid import uuid4
 from typing import Union
 
+
 class Cache():
     def __init__(self):
         """Initializing"""
