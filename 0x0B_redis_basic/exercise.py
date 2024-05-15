@@ -31,7 +31,9 @@ def call_history(method: Callable) -> Callable:
         return output
     return wrapper
 
+
 def replay(method: Callable):
+    '''Replays history'''
     r = redis.Redis()
     qn = method.__qualname__
     calls = r.get(qn)
