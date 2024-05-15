@@ -30,7 +30,22 @@ def call_history(method: Callable) -> Callable:
         self._redis.rpush(method.__qualname__ + ":outputs", output)
         return output
     return wrapper
+
+def replay(method: Callable):
+    r = redis.Redis()
+    qn = method.__qualname__
+    calls = r.get(qn)
+    try:
+        calls = calls.decode('utf-8')
+    except Exception:
+        calls = 0
+    print(qn, f"was called {calls} times")
+    inputs = r.lrange(qn+":inputs", 0, -1)
+    outputs = r.lrange(qn+":outputs", 0, -1)
     
+    for i in range(len(inputs)):
+        print(f"{qn}(*('{inputs[i]}',)) -> {outputs[i]}")
+
 class Cache():
     """Cache class"""
     def __init__(self):
