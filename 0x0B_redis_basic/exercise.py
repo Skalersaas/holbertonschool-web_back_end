@@ -41,9 +41,12 @@ def replay(method: Callable):
         calls = calls.decode('utf-8')
     except Exception:
         calls = 0
+
     print(qn, f"was called {calls} times")
+
     inputs = r.lrange(qn + ":inputs", 0, -1)
     outputs = r.lrange(qn + ":outputs", 0, -1)
+
     for input, output in zip(inputs, outputs):
         try:
             input.decode('utf-8')
