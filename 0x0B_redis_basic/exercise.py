@@ -40,10 +40,19 @@ def replay(method: Callable):
     except Exception:
         calls = 0
     print(qn, f"was called {calls} times")
-    inputs = r.lrange(qn+":inputs", 0, -1)
-    outputs = r.lrange(qn+":outputs", 0, -1)
+    inputs = r.lrange(qn + ":inputs", 0, -1)
+    outputs = r.lrange(qn + ":outputs", 0, -1)
     for input, output in zip(inputs, outputs):
-        print(f"{qn}(*{input.decode('utf-8')}) -> {output.decode('utf-8')}")
+        try:
+            input.decode('utf-8')
+        except Exception:
+            input = ""
+        try:
+            output.decode('utf-8')
+        except Exception:
+            output = ""
+            
+        print(f"{qn}(*{input}) -> {output}")
 
 class Cache():
     """Cache class"""
