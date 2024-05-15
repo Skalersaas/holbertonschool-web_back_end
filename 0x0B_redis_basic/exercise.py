@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
-""" Exercise
-"""
+""" Tasks - Redis """
+
 import redis
-from uuid import uuid4
 from typing import Union, Optional, Callable
+from uuid import uuid4, UUID
 from functools import wraps
 
 
 def count_calls(method: Callable) -> Callable:
-    """Decorator"""
+    """ Decortator for counting how many times a function
+    has been called """
+
     key = method.__qualname__
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        '''wrapper'''
+        """ Wrapper for decorator functionality """
         self._redis.incr(key)
         return method(self, *args, **kwargs)
 
@@ -21,15 +23,21 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
-    """Call history"""
+    """ Decorator to store the history of inputs and
+    outputs for a particular function.
+    """
+
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        '''wrapper'''
+        """ Wrapper for decorator functionality """
         input = str(args)
-        output = str(method(self, *args, **kwargs))
         self._redis.rpush(method.__qualname__ + ":inputs", input)
+
+        output = str(method(self, *args, **kwargs))
         self._redis.rpush(method.__qualname__ + ":outputs", output)
+
         return output
+
     return wrapper
 
 
@@ -60,39 +68,44 @@ def replay(fn: Callable):
         print(f'{f_name}(*{i}) -> {o}')
 
 
-class Cache():
-    """Cache class"""
+class Cache:
+    """ Class for implementing a Cache """
+
     def __init__(self):
-        """Initializing"""
+        """ Constructor Method """
         self._redis = redis.Redis()
         self._redis.flushdb()
 
     @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """Storing"""
-        key = str(uuid4())
-        self._redis.set(key, data)
-        return key
+        """Store the input data in Redis using a
+        random key and return the key.
+        """
+        random_key = str(uuid4())
+        self._redis.set(random_key, data)
 
-    def get(self, key: str, fn: Optional[Callable] = None) ->\
-            Union[str, bytes, int, float]:
-        """Get"""
-        val = self._redis.get(key)
+        return random_key
+
+    def get(self, key: str,
+            fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
+        """ Reading from Redis and recovering original type """
+        value = self._redis.get(key)
         if fn:
-            return fn(val)
+            value = fn(value)
 
-        return val
+        return value
 
     def get_str(self, key: str) -> str:
-        """Get string"""
-        return self._redis.get(key).decode('utf-8')
+        """ Parameterizes a value from redis to str """
+        value = self._redis.get(key)
+        return value.decode("utf-8")
 
     def get_int(self, key: str) -> int:
-        """Get int"""
-        val = self._redis.get(key)
+        """ Parameterizes a value from redis to int """
+        value = self._redis.get(key)
         try:
-            val = int(val.decode('utf-8'))
+            value = int(value.decode("utf-8"))
         except Exception:
-            val = 0
-        return val
+            value = 0
+        return value
