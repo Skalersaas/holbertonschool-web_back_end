@@ -42,9 +42,8 @@ def replay(method: Callable):
     print(qn, f"was called {calls} times")
     inputs = r.lrange(qn+":inputs", 0, -1)
     outputs = r.lrange(qn+":outputs", 0, -1)
-    
-    for i in range(len(inputs)):
-        print(f"{qn}(*{inputs[i].decode('utf-8')}) -> {outputs[i].decode('utf-8')}")
+    for input, output in zip(inputs, outputs):
+        print(f"{qn}(*{input.decode('utf-8')}) -> {output.decode('utf-8')}")
 
 class Cache():
     """Cache class"""
