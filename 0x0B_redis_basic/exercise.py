@@ -33,32 +33,31 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
-def replay(method: Callable):
-    '''Replays history'''
+def replay(fn: Callable):
+    """Display the history of calls of a particular function"""
     r = redis.Redis()
-    qn = method.__qualname__
-    calls = r.get(qn)
+    f_name = fn.__qualname__
+    n_calls = r.get(f_name)
     try:
-        calls = calls.decode('utf-8')
+        n_calls = n_calls.decode('utf-8')
     except Exception:
-        calls = 0
+        n_calls = 0
+    print(f'{f_name} was called {n_calls} times:')
 
-    print(qn, f"was called {calls} times")
+    ins = r.lrange(f_name + ":inputs", 0, -1)
+    outs = r.lrange(f_name + ":outputs", 0, -1)
 
-    inputs = r.lrange(qn + ":inputs", 0, -1)
-    outputs = r.lrange(qn + ":outputs", 0, -1)
-
-    for input, output in zip(inputs, outputs):
+    for i, o in zip(ins, outs):
         try:
-            input.decode('utf-8')
+            i = i.decode('utf-8')
         except Exception:
-            input = ""
+            i = ""
         try:
-            output.decode('utf-8')
+            o = o.decode('utf-8')
         except Exception:
-            output = ""
+            o = ""
 
-        print(f"{qn}(*{input}) -> {output}")
+        print(f'{f_name}(*{i}) -> {o}')
 
 
 class Cache():
