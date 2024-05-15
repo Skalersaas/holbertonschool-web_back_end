@@ -21,7 +21,8 @@ class Cache():
 
     def get(self, key: str, fn: Optional[Callable]) -> Union[str, bytes, int, float]:
         """Get"""
+        val = self._redis.get(key)
         if fn:
-            return fn(key)
+            return fn(val)
 
-        return self._redis.get(key)
+        return val
