@@ -4,4 +4,4 @@ CREATE TRIGGER CHECK_EMAIL
     BEFORE UPDATE ON users
     FOR EACH ROW
     WHERE email <> NEW.email
-    SET valid_email = 0;
+    SET NEW.valid_email = 0;
