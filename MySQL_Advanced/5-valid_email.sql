@@ -3,5 +3,5 @@
 CREATE TRIGGER CHECK_EMAIL
     BEFORE UPDATE ON users
     FOR EACH ROW
-    WHERE email <> NEW.email
+    WHERE OLD.email <> NEW.email
     SET NEW.valid_email = 0;
