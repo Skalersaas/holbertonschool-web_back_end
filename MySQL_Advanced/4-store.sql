@@ -2,7 +2,8 @@
 
 CREATE TRIGGER trigger
     AFTER INSERT
-    ON orders FOR
+    ON orders 
+    FOR EACH ROW
     UPDATE items
     SET quantity = quantity - NEW.number
     WHERE NEW.item_name = name;
