@@ -1,5 +1,3 @@
-// Weak map endpoint
-
 const weakMap = new WeakMap();
 
 const queryAPI = (endpoint) => {
