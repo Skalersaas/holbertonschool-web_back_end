@@ -1,1304 +1,619 @@
-﻿![](Top.png)
+# 0x13. Unittests in JS
 
-Unit testing is the process of testing that a particular function returns expected results for different set of inputs. A unit test is supposed to test standard inputs and corner cases. A unit test should only test the logic defined inside the tested function. Most calls to additional functions should be mocked, especially if they make network or database calls.
+- By: Johann Kerbrat, Engineering Manager at Uber Works
+- Weight: 1
+- Project will start Aug 16, 2022 12:00 AM, must end by Aug 19, 2022 12:00 AM
+- will be released at Aug 17, 2022 12:00 PM
+- An auto review will be launched at the deadline
 
-The goal of a unit test is to answer the question: if everything defined outside this function works as expected, does this function work as expected?
+![](https://holbertonintranet.s3.amazonaws.com/uploads/medias/2019/12/90f79a666e174e6c4ffc.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOU5BHMTQX4%2F20220816%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220816T144706Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=3eb8674539615840c0579781d737988435310cca715cb62cab3b7a6437e997c2)
 
-Integration tests aim to test a code path end-to-end. In general, only low level functions that make external calls such as HTTP requests, file I/O, database I/O, etc. are mocked.
+## Resources
 
-Integration tests will test interactions between every part of your code.
+**Read or watch:**
 
-Execute your tests with
+- [Mocha documentation](https://intranet.hbtn.io/rltoken/UPnTT5HG6C8lLlA4D19Mzg 'Mocha documentation')
+- [Chai](https://intranet.hbtn.io/rltoken/JzOj1QA-h9NYv2fI3j47Ag 'Chai')
+- [Sinon](https://intranet.hbtn.io/rltoken/xC55RYXjV26m-NAVvlSvrA 'Sinon')
+- [Express](https://intranet.hbtn.io/rltoken/w3ZOtmyppHLMbTtgHp2TzA 'Express')
+- [Request](https://intranet.hbtn.io/rltoken/h4wPelwLHR_-sCqdjkLLdg 'Request')
+- [How to Test NodeJS Apps using Mocha, Chai and SinonJS](https://intranet.hbtn.io/rltoken/ghuDvKJ2xtiAKiJuGS_U1w 'How to Test NodeJS Apps using Mocha, Chai and SinonJS')
 
-```sh
-$ python -m unittest path/to/test_file.py
-```
+## Learning Objectives
 
-# Requirements
+At the end of this project, you are expected to be able to [explain to anyone](https://intranet.hbtn.io/rltoken/Ib-pBYc03mGw7yWLbbfl5g 'explain to anyone'), **without the help of Google**:
 
-## General
+- How to use Mocha to write a test suite
+- How to use different assertion libraries (Node or Chai)
+- How to present long test suites
+- When and how to use spies
+- When and how to use stubs
+- What are hooks and when to use them
+- Unit testing with Async functions
+- How to write integration tests with a small node server
 
-- All your files will be interpreted/compiled on Ubuntu 18.04 LTS using python3 (version 3.7)
+## Requirements
+
+- All of your code will be executed on Ubuntu 18.04 using Node 12.x.x
+- Allowed editors: `vi`, `vim`, `emacs`, `Visual Studio Code`
 - All your files should end with a new line
-- The first line of all your files should be exactly #!/usr/bin/env python3
-- A README.md file, at the root of the folder of the project, is mandatory
-- Your code should use the pycodestyle style (version 2.5)
-- All your files must be executable
-- All your modules should have a documentation (python3 -c 'print(__import__("my_module").__doc__)')
-- All your classes should have a documentation (python3 -c 'print(__import__("my_module").MyClass.__doc__)')
-- All your functions (inside and outside a class) should have a documentation (python3 -c 'print(__import__("my_module").my_function.__doc__)' and python3 -c 'print(__import__("my_module").MyClass.my_function.__doc__)')
-- A documentation is not a simple word, it’s a real sentence explaining what’s the purpose of the module, class or method (the length of it will be verified)
-- All your functions and coroutines must be type-annotated.
+- A `README.md` file, at the root of the folder of the project, is mandatory
+- Your code should use the `js` extension
+- When running every test with `npm run test *.test.js`, everything should pass correctly without any warning or error
 
-## Required Files
+## Tasks
 
-- utils.py
+### 0. Basic test with Mocha and Node assertion library
 
-```sh
-#!/usr/bin/env python3
-"""Generic utilities for github org client.
-"""
-import requests
-from functools import wraps
-from typing import (
-    Mapping,
-    Sequence,
-    Any,
-    Dict,
-    Callable,
-)
+**Install Mocha using npm:**
 
-__all__ = [
-    "access_nested_map",
-    "get_json",
-    "memoize",
-]
+- Set up a scripts in your `package.json` to quickly run Mocha using `npm test`
+- You have to use `assert`
 
+**Create a new file named `0-calcul.js`:**
 
-def access_nested_map(nested_map: Mapping, path: Sequence) -> Any:
-    """Access nested map with key path.
-    Parameters
-    ----------
-    nested_map: Mapping
-        A nested map
-    path: Sequence
-        a sequence of key representing a path to the value
-    Example
-    -------
-    >>> nested_map = {"a": {"b": {"c": 1}}}
-    >>> access_nested_map(nested_map, ["a", "b", "c"])
-    1
-    """
-    for key in path:
-        if not isinstance(nested_map, Mapping):
-            raise KeyError(key)
-        nested_map = nested_map[key]
+- Create a function named `calculateNumber`. It should accepts two arguments (number) `a` and `b`
+- The function should round `a` and `b` and return the sum of it
 
-    return nested_map
+**Test cases**
 
+- Create a file `0-calcul.test.js` that contains test cases of this function
+- You can assume `a` and `b` are always number
+- Tests should be around the “rounded” part
 
-def get_json(url: str) -> Dict:
-    """Get JSON from remote URL.
-    """
-    response = requests.get(url)
-    return response.json()
+**Tips:**
 
+- For the sake of the example, this test suite is slightly extreme and probably not needed
+- However, remember that your tests should not only verify what a function is supposed to do, but also the edge cases
 
-def memoize(fn: Callable) -> Callable:
-    """Decorator to memoize a method.
-    Example
-    -------
-    class MyClass:
-        @memoize
-        def a_method(self):
-            print("a_method called")
-            return 42
-    >>> my_object = MyClass()
-    >>> my_object.a_method
-    a_method called
-    42
-    >>> my_object.a_method
-    42
-    """
-    attr_name = "_{}".format(fn.__name__)
+**Requirements:**
 
-    @wraps(fn)
-    def memoized(self):
-        """"memoized wraps"""
-        if not hasattr(self, attr_name):
-            setattr(self, attr_name, fn(self))
-        return getattr(self, attr_name)
+- You have to use `assert`
+- You should be able to run the test suite using `npm test 0-calcul.test.js`
+- Every test should pass without any warning
 
-    return property(memoized)
+**Expected output**
+
+```
+> const calculateNumber = require("./0-calcul.js");
+> calculateNumber(1, 3)
+4
+> calculateNumber(1, 3.7)
+5
+> calculateNumber(1.2, 3.7)
+5
+> calculateNumber(1.5, 3.7)
+6
+>
+
 ```
 
+**Run test**
 
-- client.py
+```
+bob@dylan:~$ npm test 0-calcul.test.js
 
-```sh
-#!/usr/bin/env python3
-"""A github org client
-"""
-from typing import (
-    List,
-    Dict,
-)
+> task_0@1.0.0 test /root
+> ./node_modules/mocha/bin/mocha "0-calcul.test.js"
 
-from utils import (
-    get_json,
-    access_nested_map,
-    memoize,
-)
+  calculateNumber
+    ✓ ...
+    ✓ ...
+    ✓ ...
+    ...
 
+  130 passing (35ms)
+bob@dylan:~$
 
-class GithubOrgClient:
-    """A Githib org client
-    """
-    ORG_URL = "https://api.github.com/orgs/{org}"
-
-    def __init__(self, org_name: str) -> None:
-        """Init method of GithubOrgClient"""
-        self._org_name = org_name
-
-    @memoize
-    def org(self) -> Dict:
-        """Memoize org"""
-        return get_json(self.ORG_URL.format(org=self._org_name))
-
-    @property
-    def _public_repos_url(self) -> str:
-        """Public repos URL"""
-        return self.org["repos_url"]
-
-    @memoize
-    def repos_payload(self) -> Dict:
-        """Memoize repos payload"""
-        return get_json(self._public_repos_url)
-
-    def public_repos(self, license: str = None) -> List[str]:
-        """Public repos"""
-        json_payload = self.repos_payload
-        public_repos = [
-            repo["name"] for repo in json_payload
-            if license is None or self.has_license(repo, license)
-        ]
-
-        return public_repos
-
-    @staticmethod
-    def has_license(repo: Dict[str, Dict], license_key: str) -> bool:
-        """Static: has_license"""
-        assert license_key is not None, "license_key cannot be None"
-        try:
-            has_license = access_nested_map(repo, ("license", "key")) == license_key
-        except KeyError:
-            return False
-        return has_license
 ```
 
-- fixtures.py
+**Repo:**
 
-```sh
-#!/usr/bin/env python3
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `package.json, 0-calcul.js, 0-calcul.test.js`
 
-TEST_PAYLOAD = [
-  (
-    {"repos_url": "https://api.github.com/orgs/google/repos"},
-    [
-      {
-        "id": 7697149,
-        "node_id": "MDEwOlJlcG9zaXRvcnk3Njk3MTQ5",
-        "name": "episodes.dart",
-        "full_name": "google/episodes.dart",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/episodes.dart",
-        "description": "A framework for timing performance of web apps.",
-        "fork": False,
-        "url": "https://api.github.com/repos/google/episodes.dart",
-        "forks_url": "https://api.github.com/repos/google/episodes.dart/forks",
-        "keys_url": "https://api.github.com/repos/google/episodes.dart/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/episodes.dart/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/episodes.dart/teams",
-        "hooks_url": "https://api.github.com/repos/google/episodes.dart/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/episodes.dart/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/episodes.dart/events",
-        "assignees_url": "https://api.github.com/repos/google/episodes.dart/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/episodes.dart/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/episodes.dart/tags",
-        "blobs_url": "https://api.github.com/repos/google/episodes.dart/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/episodes.dart/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/episodes.dart/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/episodes.dart/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/episodes.dart/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/episodes.dart/languages",
-        "stargazers_url": "https://api.github.com/repos/google/episodes.dart/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/episodes.dart/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/episodes.dart/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/episodes.dart/subscription",
-        "commits_url": "https://api.github.com/repos/google/episodes.dart/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/episodes.dart/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/episodes.dart/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/episodes.dart/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/episodes.dart/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/episodes.dart/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/episodes.dart/merges",
-        "archive_url": "https://api.github.com/repos/google/episodes.dart/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/episodes.dart/downloads",
-        "issues_url": "https://api.github.com/repos/google/episodes.dart/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/episodes.dart/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/episodes.dart/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/episodes.dart/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/episodes.dart/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/episodes.dart/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/episodes.dart/deployments",
-        "created_at": "2013-01-19T00:31:37Z",
-        "updated_at": "2019-09-23T11:53:58Z",
-        "pushed_at": "2014-10-09T21:39:33Z",
-        "git_url": "git://github.com/google/episodes.dart.git",
-        "ssh_url": "git@github.com:google/episodes.dart.git",
-        "clone_url": "https://github.com/google/episodes.dart.git",
-        "svn_url": "https://github.com/google/episodes.dart",
-        "homepage": None,
-        "size": 191,
-        "stargazers_count": 12,
-        "watchers_count": 12,
-        "language": "Dart",
-        "has_issues": True,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": True,
-        "has_pages": False,
-        "forks_count": 22,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 0,
-        "license": {
-          "key": "bsd-3-clause",
-          "name": "BSD 3-Clause \"New\" or \"Revised\" License",
-          "spdx_id": "BSD-3-Clause",
-          "url": "https://api.github.com/licenses/bsd-3-clause",
-          "node_id": "MDc6TGljZW5zZTU="
-        },
-        "forks": 22,
-        "open_issues": 0,
-        "watchers": 12,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      },
-      {
-        "id": 7776515,
-        "node_id": "MDEwOlJlcG9zaXRvcnk3Nzc2NTE1",
-        "name": "cpp-netlib",
-        "full_name": "google/cpp-netlib",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/cpp-netlib",
-        "description": "The C++ Network Library Project -- header-only, cross-platform, standards compliant networking library.",
-        "fork": True,
-        "url": "https://api.github.com/repos/google/cpp-netlib",
-        "forks_url": "https://api.github.com/repos/google/cpp-netlib/forks",
-        "keys_url": "https://api.github.com/repos/google/cpp-netlib/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/cpp-netlib/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/cpp-netlib/teams",
-        "hooks_url": "https://api.github.com/repos/google/cpp-netlib/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/cpp-netlib/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/cpp-netlib/events",
-        "assignees_url": "https://api.github.com/repos/google/cpp-netlib/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/cpp-netlib/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/cpp-netlib/tags",
-        "blobs_url": "https://api.github.com/repos/google/cpp-netlib/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/cpp-netlib/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/cpp-netlib/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/cpp-netlib/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/cpp-netlib/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/cpp-netlib/languages",
-        "stargazers_url": "https://api.github.com/repos/google/cpp-netlib/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/cpp-netlib/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/cpp-netlib/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/cpp-netlib/subscription",
-        "commits_url": "https://api.github.com/repos/google/cpp-netlib/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/cpp-netlib/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/cpp-netlib/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/cpp-netlib/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/cpp-netlib/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/cpp-netlib/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/cpp-netlib/merges",
-        "archive_url": "https://api.github.com/repos/google/cpp-netlib/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/cpp-netlib/downloads",
-        "issues_url": "https://api.github.com/repos/google/cpp-netlib/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/cpp-netlib/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/cpp-netlib/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/cpp-netlib/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/cpp-netlib/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/cpp-netlib/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/cpp-netlib/deployments",
-        "created_at": "2013-01-23T14:45:32Z",
-        "updated_at": "2019-11-15T02:26:31Z",
-        "pushed_at": "2018-12-05T17:42:29Z",
-        "git_url": "git://github.com/google/cpp-netlib.git",
-        "ssh_url": "git@github.com:google/cpp-netlib.git",
-        "clone_url": "https://github.com/google/cpp-netlib.git",
-        "svn_url": "https://github.com/google/cpp-netlib",
-        "homepage": "http://cpp-netlib.github.com/",
-        "size": 8937,
-        "stargazers_count": 292,
-        "watchers_count": 292,
-        "language": "C++",
-        "has_issues": False,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": True,
-        "has_pages": False,
-        "forks_count": 59,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 0,
-        "license": {
-          "key": "bsl-1.0",
-          "name": "Boost Software License 1.0",
-          "spdx_id": "BSL-1.0",
-          "url": "https://api.github.com/licenses/bsl-1.0",
-          "node_id": "MDc6TGljZW5zZTI4"
-        },
-        "forks": 59,
-        "open_issues": 0,
-        "watchers": 292,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      },
-      {
-        "id": 7968417,
-        "node_id": "MDEwOlJlcG9zaXRvcnk3OTY4NDE3",
-        "name": "dagger",
-        "full_name": "google/dagger",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/dagger",
-        "description": "A fast dependency injector for Android and Java.",
-        "fork": True,
-        "url": "https://api.github.com/repos/google/dagger",
-        "forks_url": "https://api.github.com/repos/google/dagger/forks",
-        "keys_url": "https://api.github.com/repos/google/dagger/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/dagger/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/dagger/teams",
-        "hooks_url": "https://api.github.com/repos/google/dagger/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/dagger/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/dagger/events",
-        "assignees_url": "https://api.github.com/repos/google/dagger/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/dagger/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/dagger/tags",
-        "blobs_url": "https://api.github.com/repos/google/dagger/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/dagger/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/dagger/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/dagger/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/dagger/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/dagger/languages",
-        "stargazers_url": "https://api.github.com/repos/google/dagger/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/dagger/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/dagger/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/dagger/subscription",
-        "commits_url": "https://api.github.com/repos/google/dagger/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/dagger/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/dagger/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/dagger/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/dagger/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/dagger/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/dagger/merges",
-        "archive_url": "https://api.github.com/repos/google/dagger/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/dagger/downloads",
-        "issues_url": "https://api.github.com/repos/google/dagger/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/dagger/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/dagger/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/dagger/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/dagger/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/dagger/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/dagger/deployments",
-        "created_at": "2013-02-01T23:14:14Z",
-        "updated_at": "2019-12-03T12:39:55Z",
-        "pushed_at": "2019-11-27T21:20:38Z",
-        "git_url": "git://github.com/google/dagger.git",
-        "ssh_url": "git@github.com:google/dagger.git",
-        "clone_url": "https://github.com/google/dagger.git",
-        "svn_url": "https://github.com/google/dagger",
-        "homepage": "https://dagger.dev",
-        "size": 59129,
-        "stargazers_count": 14492,
-        "watchers_count": 14492,
-        "language": "Java",
-        "has_issues": True,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": True,
-        "has_pages": True,
-        "forks_count": 1741,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 148,
-        "license": {
-          "key": "apache-2.0",
-          "name": "Apache License 2.0",
-          "spdx_id": "Apache-2.0",
-          "url": "https://api.github.com/licenses/apache-2.0",
-          "node_id": "MDc6TGljZW5zZTI="
-        },
-        "forks": 1741,
-        "open_issues": 148,
-        "watchers": 14492,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      },
-      {
-        "id": 8165161,
-        "node_id": "MDEwOlJlcG9zaXRvcnk4MTY1MTYx",
-        "name": "ios-webkit-debug-proxy",
-        "full_name": "google/ios-webkit-debug-proxy",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/ios-webkit-debug-proxy",
-        "description": "A DevTools proxy (Chrome Remote Debugging Protocol) for iOS devices (Safari Remote Web Inspector).",
-        "fork": False,
-        "url": "https://api.github.com/repos/google/ios-webkit-debug-proxy",
-        "forks_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/forks",
-        "keys_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/teams",
-        "hooks_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/events",
-        "assignees_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/tags",
-        "blobs_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/languages",
-        "stargazers_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/subscription",
-        "commits_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/merges",
-        "archive_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/downloads",
-        "issues_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/ios-webkit-debug-proxy/deployments",
-        "created_at": "2013-02-12T19:08:19Z",
-        "updated_at": "2019-12-04T02:06:43Z",
-        "pushed_at": "2019-11-24T07:02:13Z",
-        "git_url": "git://github.com/google/ios-webkit-debug-proxy.git",
-        "ssh_url": "git@github.com:google/ios-webkit-debug-proxy.git",
-        "clone_url": "https://github.com/google/ios-webkit-debug-proxy.git",
-        "svn_url": "https://github.com/google/ios-webkit-debug-proxy",
-        "homepage": "",
-        "size": 680,
-        "stargazers_count": 4630,
-        "watchers_count": 4630,
-        "language": "C",
-        "has_issues": True,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": False,
-        "has_pages": False,
-        "forks_count": 395,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 24,
-        "license": {
-          "key": "other",
-          "name": "Other",
-          "spdx_id": "NOASSERTION",
-          "url": None,
-          "node_id": "MDc6TGljZW5zZTA="
-        },
-        "forks": 395,
-        "open_issues": 24,
-        "watchers": 4630,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      },
-      {
-        "id": 8459994,
-        "node_id": "MDEwOlJlcG9zaXRvcnk4NDU5OTk0",
-        "name": "google.github.io",
-        "full_name": "google/google.github.io",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/google.github.io",
-        "description": None,
-        "fork": False,
-        "url": "https://api.github.com/repos/google/google.github.io",
-        "forks_url": "https://api.github.com/repos/google/google.github.io/forks",
-        "keys_url": "https://api.github.com/repos/google/google.github.io/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/google.github.io/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/google.github.io/teams",
-        "hooks_url": "https://api.github.com/repos/google/google.github.io/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/google.github.io/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/google.github.io/events",
-        "assignees_url": "https://api.github.com/repos/google/google.github.io/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/google.github.io/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/google.github.io/tags",
-        "blobs_url": "https://api.github.com/repos/google/google.github.io/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/google.github.io/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/google.github.io/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/google.github.io/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/google.github.io/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/google.github.io/languages",
-        "stargazers_url": "https://api.github.com/repos/google/google.github.io/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/google.github.io/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/google.github.io/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/google.github.io/subscription",
-        "commits_url": "https://api.github.com/repos/google/google.github.io/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/google.github.io/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/google.github.io/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/google.github.io/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/google.github.io/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/google.github.io/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/google.github.io/merges",
-        "archive_url": "https://api.github.com/repos/google/google.github.io/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/google.github.io/downloads",
-        "issues_url": "https://api.github.com/repos/google/google.github.io/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/google.github.io/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/google.github.io/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/google.github.io/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/google.github.io/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/google.github.io/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/google.github.io/deployments",
-        "created_at": "2013-02-27T16:21:19Z",
-        "updated_at": "2019-12-03T01:38:02Z",
-        "pushed_at": "2019-12-03T01:37:58Z",
-        "git_url": "git://github.com/google/google.github.io.git",
-        "ssh_url": "git@github.com:google/google.github.io.git",
-        "clone_url": "https://github.com/google/google.github.io.git",
-        "svn_url": "https://github.com/google/google.github.io",
-        "homepage": None,
-        "size": 8,
-        "stargazers_count": 38,
-        "watchers_count": 38,
-        "language": "HTML",
-        "has_issues": False,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": False,
-        "has_pages": True,
-        "forks_count": 44,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 0,
-        "license": None,
-        "forks": 44,
-        "open_issues": 0,
-        "watchers": 38,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      },
-      {
-        "id": 8566972,
-        "node_id": "MDEwOlJlcG9zaXRvcnk4NTY2OTcy",
-        "name": "kratu",
-        "full_name": "google/kratu",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/kratu",
-        "description": None,
-        "fork": False,
-        "url": "https://api.github.com/repos/google/kratu",
-        "forks_url": "https://api.github.com/repos/google/kratu/forks",
-        "keys_url": "https://api.github.com/repos/google/kratu/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/kratu/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/kratu/teams",
-        "hooks_url": "https://api.github.com/repos/google/kratu/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/kratu/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/kratu/events",
-        "assignees_url": "https://api.github.com/repos/google/kratu/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/kratu/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/kratu/tags",
-        "blobs_url": "https://api.github.com/repos/google/kratu/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/kratu/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/kratu/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/kratu/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/kratu/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/kratu/languages",
-        "stargazers_url": "https://api.github.com/repos/google/kratu/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/kratu/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/kratu/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/kratu/subscription",
-        "commits_url": "https://api.github.com/repos/google/kratu/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/kratu/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/kratu/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/kratu/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/kratu/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/kratu/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/kratu/merges",
-        "archive_url": "https://api.github.com/repos/google/kratu/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/kratu/downloads",
-        "issues_url": "https://api.github.com/repos/google/kratu/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/kratu/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/kratu/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/kratu/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/kratu/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/kratu/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/kratu/deployments",
-        "created_at": "2013-03-04T22:52:33Z",
-        "updated_at": "2019-11-15T22:22:16Z",
-        "pushed_at": "2017-08-06T05:44:34Z",
-        "git_url": "git://github.com/google/kratu.git",
-        "ssh_url": "git@github.com:google/kratu.git",
-        "clone_url": "https://github.com/google/kratu.git",
-        "svn_url": "https://github.com/google/kratu",
-        "homepage": None,
-        "size": 1777,
-        "stargazers_count": 280,
-        "watchers_count": 280,
-        "language": "JavaScript",
-        "has_issues": True,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": True,
-        "has_pages": True,
-        "forks_count": 32,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 0,
-        "license": {
-          "key": "apache-2.0",
-          "name": "Apache License 2.0",
-          "spdx_id": "Apache-2.0",
-          "url": "https://api.github.com/licenses/apache-2.0",
-          "node_id": "MDc6TGljZW5zZTI="
-        },
-        "forks": 32,
-        "open_issues": 0,
-        "watchers": 280,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      },
-      {
-        "id": 8858648,
-        "node_id": "MDEwOlJlcG9zaXRvcnk4ODU4NjQ4",
-        "name": "build-debian-cloud",
-        "full_name": "google/build-debian-cloud",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/build-debian-cloud",
-        "description": "Script to create Debian Squeeze & Wheezy Amazon Machine Images (AMIs) and Google Compute Engine images",
-        "fork": True,
-        "url": "https://api.github.com/repos/google/build-debian-cloud",
-        "forks_url": "https://api.github.com/repos/google/build-debian-cloud/forks",
-        "keys_url": "https://api.github.com/repos/google/build-debian-cloud/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/build-debian-cloud/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/build-debian-cloud/teams",
-        "hooks_url": "https://api.github.com/repos/google/build-debian-cloud/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/build-debian-cloud/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/build-debian-cloud/events",
-        "assignees_url": "https://api.github.com/repos/google/build-debian-cloud/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/build-debian-cloud/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/build-debian-cloud/tags",
-        "blobs_url": "https://api.github.com/repos/google/build-debian-cloud/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/build-debian-cloud/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/build-debian-cloud/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/build-debian-cloud/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/build-debian-cloud/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/build-debian-cloud/languages",
-        "stargazers_url": "https://api.github.com/repos/google/build-debian-cloud/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/build-debian-cloud/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/build-debian-cloud/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/build-debian-cloud/subscription",
-        "commits_url": "https://api.github.com/repos/google/build-debian-cloud/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/build-debian-cloud/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/build-debian-cloud/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/build-debian-cloud/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/build-debian-cloud/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/build-debian-cloud/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/build-debian-cloud/merges",
-        "archive_url": "https://api.github.com/repos/google/build-debian-cloud/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/build-debian-cloud/downloads",
-        "issues_url": "https://api.github.com/repos/google/build-debian-cloud/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/build-debian-cloud/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/build-debian-cloud/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/build-debian-cloud/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/build-debian-cloud/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/build-debian-cloud/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/build-debian-cloud/deployments",
-        "created_at": "2013-03-18T16:32:00Z",
-        "updated_at": "2019-09-23T11:54:00Z",
-        "pushed_at": "2014-06-17T18:52:10Z",
-        "git_url": "git://github.com/google/build-debian-cloud.git",
-        "ssh_url": "git@github.com:google/build-debian-cloud.git",
-        "clone_url": "https://github.com/google/build-debian-cloud.git",
-        "svn_url": "https://github.com/google/build-debian-cloud",
-        "homepage": "",
-        "size": 986,
-        "stargazers_count": 32,
-        "watchers_count": 32,
-        "language": "Shell",
-        "has_issues": False,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": False,
-        "has_pages": False,
-        "forks_count": 22,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 5,
-        "license": {
-          "key": "other",
-          "name": "Other",
-          "spdx_id": "NOASSERTION",
-          "url": None,
-          "node_id": "MDc6TGljZW5zZTA="
-        },
-        "forks": 22,
-        "open_issues": 5,
-        "watchers": 32,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      },
-      {
-        "id": 9060347,
-        "node_id": "MDEwOlJlcG9zaXRvcnk5MDYwMzQ3",
-        "name": "traceur-compiler",
-        "full_name": "google/traceur-compiler",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/traceur-compiler",
-        "description": "Traceur is a JavaScript.next-to-JavaScript-of-today compiler",
-        "fork": False,
-        "url": "https://api.github.com/repos/google/traceur-compiler",
-        "forks_url": "https://api.github.com/repos/google/traceur-compiler/forks",
-        "keys_url": "https://api.github.com/repos/google/traceur-compiler/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/traceur-compiler/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/traceur-compiler/teams",
-        "hooks_url": "https://api.github.com/repos/google/traceur-compiler/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/traceur-compiler/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/traceur-compiler/events",
-        "assignees_url": "https://api.github.com/repos/google/traceur-compiler/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/traceur-compiler/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/traceur-compiler/tags",
-        "blobs_url": "https://api.github.com/repos/google/traceur-compiler/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/traceur-compiler/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/traceur-compiler/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/traceur-compiler/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/traceur-compiler/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/traceur-compiler/languages",
-        "stargazers_url": "https://api.github.com/repos/google/traceur-compiler/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/traceur-compiler/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/traceur-compiler/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/traceur-compiler/subscription",
-        "commits_url": "https://api.github.com/repos/google/traceur-compiler/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/traceur-compiler/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/traceur-compiler/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/traceur-compiler/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/traceur-compiler/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/traceur-compiler/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/traceur-compiler/merges",
-        "archive_url": "https://api.github.com/repos/google/traceur-compiler/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/traceur-compiler/downloads",
-        "issues_url": "https://api.github.com/repos/google/traceur-compiler/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/traceur-compiler/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/traceur-compiler/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/traceur-compiler/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/traceur-compiler/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/traceur-compiler/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/traceur-compiler/deployments",
-        "created_at": "2013-03-27T18:05:40Z",
-        "updated_at": "2019-12-02T16:45:54Z",
-        "pushed_at": "2018-05-28T04:37:54Z",
-        "git_url": "git://github.com/google/traceur-compiler.git",
-        "ssh_url": "git@github.com:google/traceur-compiler.git",
-        "clone_url": "https://github.com/google/traceur-compiler.git",
-        "svn_url": "https://github.com/google/traceur-compiler",
-        "homepage": "",
-        "size": 27487,
-        "stargazers_count": 8033,
-        "watchers_count": 8033,
-        "language": "JavaScript",
-        "has_issues": True,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": True,
-        "has_pages": True,
-        "forks_count": 604,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 296,
-        "license": {
-          "key": "apache-2.0",
-          "name": "Apache License 2.0",
-          "spdx_id": "Apache-2.0",
-          "url": "https://api.github.com/licenses/apache-2.0",
-          "node_id": "MDc6TGljZW5zZTI="
-        },
-        "forks": 604,
-        "open_issues": 296,
-        "watchers": 8033,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      },
-      {
-        "id": 9065917,
-        "node_id": "MDEwOlJlcG9zaXRvcnk5MDY1OTE3",
-        "name": "firmata.py",
-        "full_name": "google/firmata.py",
-        "private": False,
-        "owner": {
-          "login": "google",
-          "id": 1342004,
-          "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
-          "avatar_url": "https://avatars1.githubusercontent.com/u/1342004?v=4",
-          "gravatar_id": "",
-          "url": "https://api.github.com/users/google",
-          "html_url": "https://github.com/google",
-          "followers_url": "https://api.github.com/users/google/followers",
-          "following_url": "https://api.github.com/users/google/following{/other_user}",
-          "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/google/subscriptions",
-          "organizations_url": "https://api.github.com/users/google/orgs",
-          "repos_url": "https://api.github.com/users/google/repos",
-          "events_url": "https://api.github.com/users/google/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/google/received_events",
-          "type": "Organization",
-          "site_admin": False
-        },
-        "html_url": "https://github.com/google/firmata.py",
-        "description": None,
-        "fork": False,
-        "url": "https://api.github.com/repos/google/firmata.py",
-        "forks_url": "https://api.github.com/repos/google/firmata.py/forks",
-        "keys_url": "https://api.github.com/repos/google/firmata.py/keys{/key_id}",
-        "collaborators_url": "https://api.github.com/repos/google/firmata.py/collaborators{/collaborator}",
-        "teams_url": "https://api.github.com/repos/google/firmata.py/teams",
-        "hooks_url": "https://api.github.com/repos/google/firmata.py/hooks",
-        "issue_events_url": "https://api.github.com/repos/google/firmata.py/issues/events{/number}",
-        "events_url": "https://api.github.com/repos/google/firmata.py/events",
-        "assignees_url": "https://api.github.com/repos/google/firmata.py/assignees{/user}",
-        "branches_url": "https://api.github.com/repos/google/firmata.py/branches{/branch}",
-        "tags_url": "https://api.github.com/repos/google/firmata.py/tags",
-        "blobs_url": "https://api.github.com/repos/google/firmata.py/git/blobs{/sha}",
-        "git_tags_url": "https://api.github.com/repos/google/firmata.py/git/tags{/sha}",
-        "git_refs_url": "https://api.github.com/repos/google/firmata.py/git/refs{/sha}",
-        "trees_url": "https://api.github.com/repos/google/firmata.py/git/trees{/sha}",
-        "statuses_url": "https://api.github.com/repos/google/firmata.py/statuses/{sha}",
-        "languages_url": "https://api.github.com/repos/google/firmata.py/languages",
-        "stargazers_url": "https://api.github.com/repos/google/firmata.py/stargazers",
-        "contributors_url": "https://api.github.com/repos/google/firmata.py/contributors",
-        "subscribers_url": "https://api.github.com/repos/google/firmata.py/subscribers",
-        "subscription_url": "https://api.github.com/repos/google/firmata.py/subscription",
-        "commits_url": "https://api.github.com/repos/google/firmata.py/commits{/sha}",
-        "git_commits_url": "https://api.github.com/repos/google/firmata.py/git/commits{/sha}",
-        "comments_url": "https://api.github.com/repos/google/firmata.py/comments{/number}",
-        "issue_comment_url": "https://api.github.com/repos/google/firmata.py/issues/comments{/number}",
-        "contents_url": "https://api.github.com/repos/google/firmata.py/contents/{+path}",
-        "compare_url": "https://api.github.com/repos/google/firmata.py/compare/{base}...{head}",
-        "merges_url": "https://api.github.com/repos/google/firmata.py/merges",
-        "archive_url": "https://api.github.com/repos/google/firmata.py/{archive_format}{/ref}",
-        "downloads_url": "https://api.github.com/repos/google/firmata.py/downloads",
-        "issues_url": "https://api.github.com/repos/google/firmata.py/issues{/number}",
-        "pulls_url": "https://api.github.com/repos/google/firmata.py/pulls{/number}",
-        "milestones_url": "https://api.github.com/repos/google/firmata.py/milestones{/number}",
-        "notifications_url": "https://api.github.com/repos/google/firmata.py/notifications{?since,all,participating}",
-        "labels_url": "https://api.github.com/repos/google/firmata.py/labels{/name}",
-        "releases_url": "https://api.github.com/repos/google/firmata.py/releases{/id}",
-        "deployments_url": "https://api.github.com/repos/google/firmata.py/deployments",
-        "created_at": "2013-03-27T23:20:35Z",
-        "updated_at": "2019-09-23T11:54:02Z",
-        "pushed_at": "2013-03-27T23:34:35Z",
-        "git_url": "git://github.com/google/firmata.py.git",
-        "ssh_url": "git@github.com:google/firmata.py.git",
-        "clone_url": "https://github.com/google/firmata.py.git",
-        "svn_url": "https://github.com/google/firmata.py",
-        "homepage": None,
-        "size": 160,
-        "stargazers_count": 15,
-        "watchers_count": 15,
-        "language": "Python",
-        "has_issues": True,
-        "has_projects": True,
-        "has_downloads": True,
-        "has_wiki": True,
-        "has_pages": False,
-        "forks_count": 15,
-        "mirror_url": None,
-        "archived": False,
-        "disabled": False,
-        "open_issues_count": 0,
-        "license": {
-          "key": "apache-2.0",
-          "name": "Apache License 2.0",
-          "spdx_id": "Apache-2.0",
-          "url": "https://api.github.com/licenses/apache-2.0",
-          "node_id": "MDc6TGljZW5zZTI="
-        },
-        "forks": 15,
-        "open_issues": 0,
-        "watchers": 15,
-        "default_branch": "master",
-        "permissions": {
-          "admin": False,
-          "push": False,
-          "pull": True
-        }
-      }
-    ],
-    ['episodes.dart', 'cpp-netlib', 'dagger', 'ios-webkit-debug-proxy', 'google.github.io', 'kratu', 'build-debian-cloud', 'traceur-compiler', 'firmata.py'],
-    ['dagger', 'kratu', 'traceur-compiler', 'firmata.py'],
-  )
-]
+### 1. Combining descriptions
+
+**Create a new file named `1-calcul.js`:**
+
+- Upgrade the function you created in the previous task (`0-calcul.js`)
+- Add a new argument named `type` at first argument of the function. `type` can be `SUM`, `SUBTRACT`, or `DIVIDE` (string)
+- When type is `SUM`, round the two numbers, and add `a` from `b`
+- When type is `SUBTRACT`, round the two numbers, and subtract `b` from `a`
+- When type is `DIVIDE`, round the two numbers, and divide `a` with `b` - if the rounded value of `b` is equal to 0, return the string `Error`
+
+**Test cases**
+
+- Create a file `1-calcul.test.js` that contains test cases of this function
+- You can assume `a` and `b` are always number
+- Usage of `describe` will help you to organize your test cases
+
+**Tips:**
+
+- For the sake of the example, this test suite is slightly extreme and probably not needed
+- However, remember that your tests should not only verify what a function is supposed to do, but also the edge cases
+
+**Requirements:**
+
+- You have to use `assert`
+- You should be able to run the test suite using `npm test 1-calcul.test.js`
+- Every test should pass without any warning
+
+**Expected output**
+
+```
+> const calculateNumber = require("./1-calcul.js");
+> calculateNumber('SUM', 1.4, 4.5)
+6
+> calculateNumber('SUBTRACT', 1.4, 4.5)
+-4
+> calculateNumber('DIVIDE', 1.4, 4.5)
+0.2
+> calculateNumber('DIVIDE', 1.4, 0)
+'Error'
+
 ```
 
-## Task
+**Repo:**
 
-**0. Parameterize a unit test**
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `1-calcul.js, 1-calcul.test.js`
 
-File: [test_utils.py](test_utils.py/)
+### 2. Basic test using Chai assertion library
 
-Familiarize yourself with the utils.access_nested_map function and understand its purpose. Play with it in the Python console to make sure you understand.
+While using Node assert library is completely valid, a lot of developers prefer to have a behavior driven development style. This type being easier to read and therefore to maintain.
 
-In this task you will write the first unit test for utils.access_nested_map.
+**Let’s install Chai with npm:**
 
-Create a TestAccessNestedMap class that inherits from unittest.TestCase.
+- Copy the file `1-calcul.js` in a new file `2-calcul_chai.js` (same content, same behavior)
+- Copy the file `1-calcul.test.js` in a new file `2-calcul_chai.test.js`
+- Rewrite the test suite, using `expect` from `Chai`
 
-Implement the TestAccessNestedMap.test_access_nested_map method to test that the method returns what it is supposed to.
+**Tips:**
 
-Decorate the method with @parameterized.expand to test the function for following inputs:
+- Remember that test coverage is always difficult to maintain. Using an easier style for your tests will help you
+- The easier your tests are to read and understand, the more other engineers will be able to fix them when they are modifying your code
 
-```sh
-nested_map={"a": 1}, path=("a",)
-nested_map={"a": {"b": 2}}, path=("a",)
-nested_map={"a": {"b": 2}}, path=("a", "b")
+**Requirements:**
+
+- You should be able to run the test suite using `npm test 2-calcul_chai.test.js`
+- Every test should pass without any warning
+
+**Repo:**
+
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `2-calcul_chai.js, 2-calcul_chai.test.js`
+
+### 3. Spies
+
+Spies are a useful wrapper that will execute the wrapped function, and log useful information (e.g. was it called, with what arguments). Sinon is a library allowing you to create spies.
+
+**Let’s install Sinon with npm:**
+
+- Create a new file named `utils.js`
+- Create a new module named `Utils`
+- Create a property named `calculateNumber` and paste your previous code in the function
+- Export the Utils module
+
+**Create a new file named `3-payment.js`:**
+
+- Create a new function named `sendPaymentRequestToApi`. The function takes two argument `totalAmount`, and `totalShipping`
+- The function calls the `Utils.calculateNumber` function with type `SUM`, `totalAmount` as `a`, `totalShipping` as `b` and display in the console the message `The total is: <result of the sum>`
+
+**Create a new file named `3-payment.test.js` and add a new suite named `sendPaymentRequestToApi`:**
+
+- By using `sinon.spy`, make sure the math used for `sendPaymentRequestToApi(100, 20)` is the same as `Utils.calculateNumber('SUM', 100, 20)` (validate the usage of the `Utils` function)
+
+**Requirements:**
+
+- You should be able to run the test suite using `npm test 3-payment.test.js`
+- Every test should pass without any warning
+- You should use a `spy` to complete this exercise
+
+**Tips:**
+
+- Remember to always restore a spy after using it in a test, it will prevent you from having weird behaviors
+- Spies are really useful and allow you to focus only on what your code is doing and not the downstream APIs or functions
+- Remember that integration test is different from unit test. Your unit test should test your code, not the code of a different function
+
+**Repo:**
+
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `utils.js, 3-payment.js, 3-payment.test.js`
+
+### 4. Stubs
+
+Stubs are similar to spies. Except that you can provide a different implementation of the function you are wrapping. Sinon can be used as well for stubs.
+
+**Create a new file `4-payment.js`, and copy the code from `3-payment.js`** (same content, same behavior)
+
+**Create a new file `4-payment.test.js`, and copy the code from `3-payment.test.js`**
+
+- Imagine that calling the function `Utils.calculateNumber` is actually calling an API or a very expensive method. You don’t necessarily want to do that on every test run
+- Stub the function `Utils.calculateNumber` to always return the same number `10`
+- Verify that the stub is being called with `type = SUM`, `a = 100`, and `b = 20`
+- Add a spy to verify that `console.log` is logging the correct message `The total is: 10`
+
+**Requirements:**
+
+- You should be able to run the test suite using `npm test 4-payment.test.js`
+- Every test should pass without any warning
+- You should use a `stub` to complete this exercise
+- Do not forget to restore the spy and the stub
+
+**Tips:**
+
+- Using stubs allows you to greatly speed up your test. When executing thousands of tests, saving a few seconds is important
+- Using stubs allows you to control specific edge case (e.g a function throwing an error or returning a specific result like a number or a timestamp)
+
+**Repo:**
+
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `4-payment.js, 4-payment.test.js`
+
+### 5. Hooks
+
+Hooks are useful functions that can be called before execute one or all tests in a suite
+
+**Copy the code from `4-payment.js` into a new file `5-payment.js`:** (same content/same behavior)
+
+**Create a new file `5-payment.test.js`:**
+
+- Inside the same `describe`, create 2 tests:
+  - The first test will call `sendPaymentRequestToAPI` with 100, and 20:
+    - Verify that the console is logging the string `The total is: 120`
+    - Verify that the console is only called once
+  - The second test will call `sendPaymentRequestToAPI` with 10, and 10:
+    - Verify that the console is logging the string `The total is: 20`
+    - Verify that the console is only called once
+
+**Requirements:**
+
+- You should be able to run the test suite using `npm test 5-payment.test.js`
+- Every test should pass without any warning
+- You should use only one `spy` to complete this exercise
+- You should use a `beforeEach` and a `afterEach` hooks to complete this exercise
+
+**Repo:**
+
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `5-payment.js, 5-payment.test.js`
+
+### 6. Async tests with done
+
+Look into how to support async testing, for example when waiting for the answer of an API or from a Promise
+
+**Create a new file `6-payment_token.js`:**
+
+- Create a new function named `getPaymentTokenFromAPI`
+- The function will take an argument called `success` (boolean)
+- When `success` is true, it should return a resolved promise with the object `{data: 'Successful response from the API' }`
+- Otherwise, the function is doing nothing.
+
+**Create a new file `6-payment_token.test.js` and write a test suite named `getPaymentTokenFromAPI`**
+
+- How to test the result of `getPaymentTokenFromAPI(true)`?
+
+**Tips:**
+
+- You should be extremely careful when working with async testing. Without calling `done` properly, your test could be always passing even if what you are actually testing is never executed
+
+**Requirements:**
+
+- You should be able to run the test suite using `npm test 6-payment_token.test.js`
+- Every test should pass without any warning
+- You should use the `done` callback to execute this test
+
+**Repo:**
+
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `6-payment_token.js, 6-payment_token.test.js`
+
+### 7. Skip
+
+When you have a long list of tests, and you can’t figure out why a test is breaking, avoid commenting out a test, or removing it. **Skip** it instead, and file a ticket to come back to it as soon as possible
+
+You will be using this file, conveniently named `7-skip.test.js`
+
+```
+const { expect } = require('chai');
+
+describe('Testing numbers', () => {
+  it('1 is equal to 1', () => {
+    expect(1 === 1).to.be.true;
+  });
+
+  it('2 is equal to 2', () => {
+    expect(2 === 2).to.be.true;
+  });
+
+  it('1 is equal to 3', () => {
+    expect(1 === 3).to.be.true;
+  });
+
+  it('3 is equal to 3', () => {
+    expect(3 === 3).to.be.true;
+  });
+
+  it('4 is equal to 4', () => {
+    expect(4 === 4).to.be.true;
+  });
+
+  it('5 is equal to 5', () => {
+    expect(5 === 5).to.be.true;
+  });
+
+  it('6 is equal to 6', () => {
+    expect(6 === 6).to.be.true;
+  });
+
+  it('7 is equal to 7', () => {
+    expect(7 === 7).to.be.true;
+  });
+});
+
 ```
 
-For each of these inputs, test with assertEqual that the function returns the expected result.
+**Using the file `7-skip.test.js`:**
 
-The body of the test method should not be longer than 2 lines.
+- Make the test suite pass **without** fixing or removing the failing test
+- `it` description **must stay** the same
 
-**1. Parameterize a unit test**
+**Tips:**
 
-File: [test_utils.py](test_utils.py/)
+- Skipping is also very helpful when you only want to execute the test in a particular case (specific environment, or when an API is not behaving correctly)
 
-Implement TestAccessNestedMap.test_access_nested_map_exception. Use the assertRaises context manager to test that a KeyError is raised for the following inputs (use @parameterized.expand):
+**Requirements:**
 
-```sh
-nested_map={}, path=("a",)
-nested_map={"a": 1}, path=("a", "b")
+- You should be able to run the test suite using `npm test 7-skip.test.js`
+- Every test should pass without any warning
+
+**Repo:**
+
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `7-skip.test.js`
+
+### 8. Basic Integration testing
+
+In a folder `8-api` located at the root of the project directory, copy this `package.json` over.
+
+```
+{
+  "name": "8-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "request": "^2.88.0",
+    "sinon": "^7.5.0"
+  }
+}
+
 ```
 
-Also make sure that the exception message is as expected.
+**Create a new file `api.js`:**
 
-**2. Mock HTTP calls**
+- By using `express`, create an instance of `express` called `app`
+- Listen to port 7865 and log `API available on localhost port 7865` to the browser console when the `express` server is started
+- For the route `GET /`, return the message `Welcome to the payment system`
 
-File: [test_utils.py](test_utils.py/)
+**Create a new file `api.test.js`:**
 
-Familiarize yourself with the utils.get_json function.
+- Create one suite for the index page:
+  - Correct status code?
+  - Correct result?
+  - Other?
 
-Define the TestGetJson(unittest.TestCase) class and implement the TestGetJson.test_get_json method to test that utils.get_json returns the expected result.
+**Server**
 
-We don’t want to make any actual external HTTP calls. Use unittest.mock.patch to patch requests.get. Make sure it returns a Mock object with a json method that returns test_payload which you parametrize alongside the test_url that you will pass to get_json with the following inputs:
+Terminal 1
 
-```sh
-test_url="http://example.com", test_payload={"payload": True}
-test_url="http://holberton.io", test_payload={"payload": False}
 ```
-Test that the mocked get method was called exactly once (per input) with test_url as argument.
+bob@dylan:~/8-api$  node api.js
+API available on localhost port 7865
 
-Test that the output of get_json is equal to test_payload.
-
-**3. Parameterize and patch**
-
-File: [test_utils.py](test_utils.py/)
-
-Read about memoization and familiarize yourself with the utils.memoize decorator.
-
-Implement the TestMemoize(unittest.TestCase) class with a test_memoize method.
-
-Inside test_memoize, define following class
-```sh
-class TestClass:
-
-    def a_method(self):
-        return 42
-
-    @memoize
-    def a_property(self):
-        return self.a_method()
 ```
 
-Use unittest.mock.patch to mock a_method. Test that when calling a_property twice, the correct result is returned but a_method is only called once using assert_called_once.
+Terminal 2
 
-**4. Parameterize and patch as decorators**
+```
+bob@dylan:~/8-api$  curl http://localhost:7865 ; echo ""
+Welcome to the payment system
+bob@dylan:~/8-api$
+bob@dylan:~/8-api$ npm test api.test.js
 
-File: [test_client.py](test_client.py/)
-
-Familiarize yourself with the client.GithubOrgClient class.
-
-In a new test_client.py file, declare the TestGithubOrgClient(unittest.TestCase) class and implement the test_org method.
-
-This method should test that GithubOrgClient.org returns the correct value.
-
-Use @patch as a decorator to make sure get_json is called once with the expected argument but make sure it is not executed.
-
-Use @parameterized.expand as a decorator to parametrize the test with a couple of org examples to pass to GithubOrgClient, in this order:
-
-google
-abc
-Of course, no external HTTP calls should be made.
+> 8-api@1.0.0 test /root/8-api
+> ./node_modules/mocha/bin/mocha "api.test.js"
 
 
-**5. Mocking a property**
 
-File: [test_client.py](test_client.py/)
+  Index page
+    ✓ ...
+    ✓ ...
+    ...
 
-memoize turns methods into properties. Read up on how to mock a property (see resource).
+  23 passing (256ms)
 
-Implement the test_public_repos_url method to unit-test GithubOrgClient._public_repos_url.
+bob@dylan:~/8-api$
 
-Use patch as a context manager to patch GithubOrgClient.org and make it return a known payload.
-
-Test that the result of _public_repos_url is the expected one based on the mocked payload.
-
-
-**6. More patching**
-
-File: [test_client.py](test_client.py/)
-
-Implement TestGithubOrgClient.test_public_repos to unit-test GithubOrgClient.public_repos.
-
-Use @patch as a decorator to mock get_json and make it return a payload of your choice.
-
-Use patch as a context manager to mock GithubOrgClient._public_repos_url and return a value of your choice.
-
-Test that the list of repos is what you expect from the chosen payload.
-
-Test that the mocked property and the mocked get_json was called once.
-
-
-**7. Parameterize**
-
-File: [test_client.py](test_client.py/)
-
-Implement TestGithubOrgClient.test_has_license to unit-test GithubOrgClient.has_license.
-
-Parametrize the test with the following inputs
-
-```sh
-repo={"license": {"key": "my_license"}}, license_key="my_license"
-repo={"license": {"key": "other_license"}}, license_key="my_license"
 ```
 
-You should also parameterize the expected returned value.
+**Tips:**
 
+- Since this is an integration test, you will need to have your node server running for the test to pass
+- You can use the module `request`
 
-**8. Integration test: fixtures**
+**Requirements:**
 
-Files: [test_client.py](test_client.py/)
+- You should be able to run the test suite using `npm test api.test.js`
+- Every test should pass without any warnings
 
-We want to test the GithubOrgClient.public_repos method in an integration test. That means that we will only mock code that sends external requests.
+**Repo:**
 
-Create the TestIntegrationGithubOrgClient(unittest.TestCase) class and implement the setUpClass and tearDownClass which are part of the unittest.TestCase API.
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `8-api/package.json, 8-api/api.js, 8-api/api.test.js`
 
-Use @parameterized_class to decorate the class and parameterize it with fixtures found in fixtures.py. The file contains the following fixtures:
+### 9. Regex integration testing
 
-```sh
-org_payload, repos_payload, expected_repos, apache2_repos
+In a folder `9-api`, reusing the previous project in `8-api` (`package.json`, `api.js` and `api.test.js`)
+
+**Modify the file `api.js`:**
+
+- Add a new endpoint: `GET /cart/:id`
+- `:id` must be only a number (validation must be in the route definition)
+- When access, the endpoint should return `Payment methods for cart :id`
+
+**Modify the file `api.test.js`:**
+
+- Add a new test suite for the cart page:
+  - Correct status code when `:id` is a number?
+  - Correct status code when `:id` is NOT a number (=> 404)?
+  - etc.
+
+**Server**
+
+Terminal 1
+
 ```
-The setupClass should mock requests.get to return example payloads found in the fixtures.
+bob@dylan:~$ node api.js
+API available on localhost port 7865
 
-Use patch to start a patcher named get_patcher, and use side_effect to make sure the mock of requests.get(url).json() returns the correct fixtures for the various values of url that you anticipate to receive.
+```
 
-Implement the tearDownClass class method to stop the patcher.
+Terminal 2
 
+```
+bob@dylan:~$ curl http://localhost:7865/cart/12 ; echo ""
+Payment methods for cart 12
+bob@dylan:~$
+bob@dylan:~$ curl http://localhost:7865/cart/hello -v
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 7865 (#0)
+> GET /cart/hello HTTP/1.1
+> Host: localhost:7865
+> User-Agent: curl/7.58.0
+> Accept: */*
+>
+< HTTP/1.1 404 Not Found
+< X-Powered-By: Express
+< Content-Security-Policy: default-src 'none'
+< X-Content-Type-Options: nosniff
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 149
+< Date: Wed, 15 Jul 2020 08:33:44 GMT
+< Connection: keep-alive
+<
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /cart/hello</pre>
+</body>
+</html>
+* Connection #0 to host localhost left intact
+bob@dylan:~$
 
-**9. Integration tests**
+```
 
-File: [test_client.py](test_client.py/)
+**Tips:**
 
-Implement the test_public_repos method to test GithubOrgClient.public_repos.
+- You will need to add a small regex in your path to support the usecase
 
-Make sure that the method returns the expected results based on the fixtures.
+**Requirements:**
 
-Implement test_public_repos_with_license to test the public_repos with the argument license="apache-2.0" and make sure the result matches the expected value from the fixtures.
+- You should be able to run the test suite using `npm test api.test.js`
+- Every test should pass without any warning
+
+**Repo:**
+
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `9-api/api.js, 9-api/api.test.js, 9-api/package.json`
+
+### 10. Deep equality & Post integration testing
+
+In a folder `10-api`, reusing the previous project in `9-api` (`package.json`, `api.js` and `api.test.js`)
+
+**Modify the file `api.js`:**
+
+- Add an endpoint `GET /available_payments` that returns an object with the following structure:
+
+```
+{
+  payment_methods: {
+    credit_cards: true,
+    paypal: false
+  }
+}
+
+```
+
+- Add an endpoint `POST /login` that returns the message `Welcome :username` where `:username` is the value of the body variable `userName`.
+
+**Modify the file `api.test.js`:**
+
+- Add a test suite for the `/login` endpoint
+- Add a test suite for the `/available_payments` endpoint
+
+**Server**
+
+Terminal 1
+
+```
+bob@dylan:~$ node api.js
+API available on localhost port 7865
+
+```
+
+Terminal 2
+
+```
+bob@dylan:~$ curl http://localhost:7865/available_payments ; echo ""
+{"payment_methods":{"credit_cards":true,"paypal":false}}
+bob@dylan:~$
+bob@dylan:~$ curl -XPOST http://localhost:7865/login -d '{ "userName": "Betty" }' -H 'Content-Type: application/json' ; echo ""
+Welcome Betty
+bob@dylan:~$
+
+```
+
+**Tips:**
+
+- Look at deep equality to compare objects
+
+**Requirements:**
+
+- You should be able to run the test suite using `npm test api.test.js`
+- Every test should pass without any warning
+- Your server should not display any error
+
+**Repo:**
+
+- GitHub repository: `holbertonschool-web_back_end`
+- Directory: `0x13-unittests_in_js`
+- File: `10-api/api.js, 10-api/api.test.js, 10-api/package.json`
+
+Copyright © 2022 Holberton Inc, All rights reserved.
